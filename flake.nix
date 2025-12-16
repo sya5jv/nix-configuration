@@ -4,11 +4,15 @@
   description = "Description for the project";
 
   inputs = {
-    flake-parts.url = "github:hercules-ci/flake-parts";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ flake-parts, ... }:
+  outputs = inputs@{ nixpkgs, flake-parts, home-manager, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } (top@{ config, withSystem, moduleWithSystem, ... }: {
 
       debug = true;
@@ -22,7 +26,7 @@
 
             ({ pkgs, ... }: {
               imports = [
-                ./configuration.nix
+                ./hosts/lemontree/configuration.nix
               ];
 
               nixpkgs.config.allowUnfree = true;
@@ -33,6 +37,13 @@
               #   config.packages.bat
               # );
             })
+
+            home-manager.nixosModules.home-manager {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+
+              home-manager.users.syahn = import ./home.nix;
+            }
 
           ];
         };

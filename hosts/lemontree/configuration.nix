@@ -1,38 +1,41 @@
-# Edit this configuration file to define what should be installed on
-# your system. Help is available in the configuration.nix(5) man page, on
-# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-
 { config, lib, pkgs, inputs, ... }:
 {
   imports =
-    [ # Include the results of the hardware scan.
-       ./hardware-configuration.nix
-       # ./main-user.nix
+    [
+       ./hardware-configuration.nix   # Hardware configuration for lemontree (Lenovo ThinkPad P14s Gen 6)
     ];
 
+  # Enabling flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  # main-user.enable = true;
-  # main-user.username = "syahn";
-
-  # Use the systemd-boot EFI boot loader.
+  # systemd-boot EFI boot loader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Use latest kernel.
+  # Use latest kernel
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  # boot.resumeDevice = "/dev/dm-1";  # WIP: Need to look at TPM
 
-  boot.initrd.kernelModules = [ "dm-snapshot" "cryptd" ];
+  # Kernel modules on startup
+  boot.initrd.kernelModules = [ 
+    "dm-snapshot" # dm-snapshot for btrfs CoW snapshots
+    "cryptd"      # cryptd for LUKS encryption of disk
+  ];
+
+  # Enabling systemd at stage 1 for suspensions and hibernation on encryted disks
   boot.initrd.systemd = {
     enable = true;
   };
+
+  # Specifying which device is LUKS encrypted
   boot.initrd.luks.devices = {
     luksroot = {
       device = "/dev/nvme0n1p2";
       preLVM = true;
     };
   };
+
+  # Device hibernation
+  # boot.resumeDevice = "/dev/dm-1";  # WIP: Need to look at TPM in order to look at automatic device unlocking
 
   fileSystems = {
     "/".options = [ "compress=zstd" ];
@@ -58,28 +61,23 @@
   services.tlp = {
     enable = true;
     settings = {
-      # Processor settings
+      # CPU scaling driver operating mode (adjusts processor freqs)
       CPU_DRIVER_OPMODE_ON_AC = "active";
       CPU_DRIVER_OPMODE_ON_BAT = "active";
       CPU_DRIVER_OPMODE_ON_SAV = "guided";
 
+      # CPU usage governor (rate limiter) settings
       CPU_SCALING_GOVERNOR_ON_AC = "performance";
       CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
       CPU_SCALING_GOVERNOR_ON_SAV = "powersave";
 
+      # CPU energy performance policies
       CPU_ENERGY_PERF_POLICY_ON_AC = "balanced_performance";
       CPU_ENERGY_PERF_POLICY_ON_BAT = "balanced_power";
       CPU_ENERGY_PERF_POLICY_ON_SAV = "power";
 
-      # CPU_MIX_PERF_ON_AC = 0;   # Unsure if AMD can use these settings
-      # CPU_MAX_PERF_ON_AC = 100;
-      # CPU_MIX_PERF_ON_BAT = 0;
-      # CPU_MAX_PERF_ON_BAT = 80;
-      # CPU_MIX_PERF_ON_SAV = 0;
-      # CPU_MAX_PERF_ON_SAV = 60;
-
       # Charging thresholds
-      START_CHARGE_THRESH_BAT0 = 40;
+      START_CHARGE_THRESH_BAT0 = 75;
       STOP_CHARGE_THRESH_BAT0 = 80;
 
       # Restore configured thresholds when AC is unplugged
@@ -104,21 +102,24 @@
       PLATFORM_PROFILE_ON_BAT="balanced";
       PLATFORM_PROFILE_ON_SAV="low-power";
 
-      MEM_SLEEP_ON_AC="s2idle";
+      # Default sleep profiles
+      MEM_SLEEP_ON_AC="deep";
       MEM_SLEEP_ON_BAT="deep";
 
-      # Radio settings
+      # Radio devices settings
       RESTORE_DEVICE_STATE_ON_STARTUP = 1;
       DEVICES_TO_ENABLE_ON_STARTUP = "bluetooth wifi wwan";
     };
   };
 
+  # Laptop lid power settings
   services.logind.settings.Login = {
     HandleLidSwitch = "suspend";
     HandleLidSwitchExternalPower = "suspend";
     HandleLidSwitchDocked = "ignore";
   };
 
+  # BTRFS automatic data integrity checking
   services.btrfs.autoScrub = {
     enable = false;
     interval = "monthly";
@@ -134,7 +135,6 @@
       KbdInteractiveAuthentication = false;  # should be false
       PermitRootLogin = "no";
       AllowUsers = [ "syahn" ];
-      # AllowUsers = [ "syahn" "hasoony" ];
     };
   };
 
@@ -177,14 +177,11 @@
 
   # Configure keymap in X11
   services.xserver.xkb.layout = "us";
-  # services.xserver.xkb.options = "eurosign:e,caps:escape";
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
   # Enable sound.
-  # services.pulseaudio.enable = true;
-  # OR
   services.pipewire = {
     enable = true;
     pulse.enable = true;
@@ -229,57 +226,38 @@
     tpm2-tss  # TPM2 manager
   ];
 
-  # environment.variables = rec {
-  # };
+  fonts.packages = with pkgs; [
+    nerd-fonts.jetbrains-mono
+  ];
 
   programs = {
-    ssh.startAgent = true;
 
+    # ssh-agent
+    ssh = {
+      startAgent = true;
+      extraConfig = ''
+        Host github.com
+          IdentityFile ~/.ssh/id_ed25519_20251214
+      '';
+    };
+
+    # fish shell
     fish.enable = true;
 
+    # Neovim editor
     neovim = {
       enable = true;
       defaultEditor = true;
     };
 
-    # Some programs need SUID wrappers, can be configured further or are
-    # started in user sessions.
-    # mtr.enable = true;
-    # gnupg.agent = {
-    #   enable = true;
-    #   enableSSHSupport = true;
-    # };
   };
 
   networking = {
-    # Set network hostname
     hostName = "lemontree";
 
-    # Configure network connections using NetworkManager
     networkmanager = {
       enable = true;
     };
-
-    # Configure network proxy if necessary
-    # From default 'configuration.nix'
-    # proxy = {
-    #   default = "http://user:password@proxy:port/";
-    #   noProxy = "127.0.0.1,localhost,internal.domain";
-    # };
-
-    # Configure nftables
-    # https://nixos.wiki/wiki/Networking
-    # nftables = {
-    #   enable = true;
-    #   ruleset = ''
-    #       table ip nat {
-    #         chain PREROUTING {
-    #           type nat hook prerouting priority dstnat; policy accept;
-    #           iifname "ens3" tcp dport 80 dnat to 10.100.0.3:80
-    #         }
-    #       }
-    #     '';
-    # };
 
     firewall = {
       enable = true;
@@ -300,28 +278,64 @@
     };
   };
 
-  # Copy the NixOS configuration file and link it from the resulting system
-  # (/run/current-system/configuration.nix). This is useful in case you
-  # accidentally delete configuration.nix.
-  # system.copySystemConfiguration = true;
-
-  # This option defines the first version of NixOS you have installed on this particular machine,
-  # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
-  #
-  # Most users should NEVER change this value after the initial install, for any reason,
-  # even if you've upgraded your system to a new NixOS release.
-  #
-  # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
-  # so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
-  # to actually do that.
-  #
-  # This value being lower than the current NixOS release does NOT mean your system is
-  # out of date, out of support, or vulnerable.
-  #
-  # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
-  # and migrated your data accordingly.
-  #
-  # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "25.11"; # Did you read the comment?
 
 }
+
+# Archived comments from nixos-generate-config
+
+# Edit this configuration file to define what should be installed on
+# your system. Help is available in the configuration.nix(5) man page, on
+# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
+
+# Some programs need SUID wrappers, can be configured further or are
+# started in user sessions.
+# mtr.enable = true;
+# gnupg.agent = {
+#   enable = true;
+#   enableSSHSupport = true;
+# };
+
+# Configure network proxy if necessary
+# From default 'configuration.nix'
+# proxy = {
+#   default = "http://user:password@proxy:port/";
+#   noProxy = "127.0.0.1,localhost,internal.domain";
+# };
+
+# Configure nftables
+# https://nixos.wiki/wiki/Networking
+# nftables = {
+#   enable = true;
+#   ruleset = ''
+#       table ip nat {
+#         chain PREROUTING {
+#           type nat hook prerouting priority dstnat; policy accept;
+#           iifname "ens3" tcp dport 80 dnat to 10.100.0.3:80
+#         }
+#       }
+#     '';
+# };
+
+# Copy the NixOS configuration file and link it from the resulting system
+# (/run/current-system/configuration.nix). This is useful in case you
+# accidentally delete configuration.nix.
+# system.copySystemConfiguration = true;
+
+# This option defines the first version of NixOS you have installed on this particular machine,
+# and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
+#
+# Most users should NEVER change this value after the initial install, for any reason,
+# even if you've upgraded your system to a new NixOS release.
+#
+# This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
+# so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
+# to actually do that.
+#
+# This value being lower than the current NixOS release does NOT mean your system is
+# out of date, out of support, or vulnerable.
+#
+# Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
+# and migrated your data accordingly.
+#
+# For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
