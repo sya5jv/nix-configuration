@@ -17,7 +17,9 @@
 
       debug = true;
 
-      imports = [];
+      imports = [
+        inputs.home-manager.flakeModules.home-manager
+      ];
 
       flake = {
 
