@@ -208,22 +208,23 @@
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
   environment.systemPackages = with pkgs; [
-    fish      # Shell
-    vim       # Text editor
-    neovim    # Text editor
-    fastfetch # System monitoring
-    tmux      # Terminal multiplexer
-    git       # Version control
-    zoxide    # CLI utility
-    fzf       # CLI utility
-    wget      # CLI utility
-    bat       # CLI utility
-    tree      # CLI utility
-    dysk      # System monitoring
-    btop      # System monitoring
-    which     # CLI utility
-    sbctl     # Secure boot manager
-    tpm2-tss  # TPM2 manager
+    fish        # Shell
+    vim         # Text editor
+    neovim      # Text editor
+    fastfetch   # System monitoring
+    tmux        # Terminal multiplexer
+    git         # Version control
+    zoxide      # CLI utility
+    fzf         # CLI utility
+    wget        # CLI utility
+    bat         # CLI utility
+    tree        # CLI utility
+    dysk        # System monitoring
+    btop        # System monitoring
+    which       # CLI utility
+    sbctl       # Secure boot manager
+    tpm2-tss    # TPM2 manager
+    tpm2-tools  # TPM2 Utilities
   ];
 
   fonts.packages = with pkgs; [
