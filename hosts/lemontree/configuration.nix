@@ -192,7 +192,7 @@
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.syahn = {
-    isSystemUser = true;
+    isNormalUser = true;
     home = "/home/syahn";
     uid = 1000;
     group = "users";
@@ -206,7 +206,7 @@
   };
 
   users.users.root = {
-    isNormalUser = true;
+    isSystemUser = true;
     home = "/root";
     uid = 0;
     group = "root";
