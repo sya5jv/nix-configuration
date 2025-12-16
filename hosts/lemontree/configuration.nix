@@ -192,12 +192,25 @@
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.syahn = {
-    isNormalUser = true;
+    isSystemUser = true;
     home = "/home/syahn";
     uid = 1000;
     group = "users";
     extraGroups = [
       "wheel"
+      "networkmanager"
+      "tss"
+    ];
+    shell = pkgs.fish;
+    # openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKsUBONtlC6T4CvTGGkRFcsHYhJiz9KZ+JqJzHOXVOqA syahn-2025-12-13" ];
+  };
+
+  users.users.root = {
+    isNormalUser = true;
+    home = "/root";
+    uid = 0;
+    group = "root";
+    extraGroups = [
       "networkmanager"
       "tss"
     ];
