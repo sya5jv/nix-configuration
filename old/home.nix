@@ -110,8 +110,6 @@
 
   };
 
-  # home.file.".config/example".source = ./config/example;
-
   home.stateVersion = "25.11";
 }
 
