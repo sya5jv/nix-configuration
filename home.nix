@@ -103,8 +103,8 @@
 
         sl = "eza";
         ls = "eza";
-        ll = "eza --long";
-        la = "eza --long -a";
+        ll = "eza --long -g";
+        la = "eza --long -ag";
       };
     };
 
