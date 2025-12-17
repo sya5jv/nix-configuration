@@ -74,6 +74,7 @@
         abbr -a --position anywhere .... ../../..
         abbr -a --position anywhere ..... ../../../..
         abbr -a !! --position anywhere --function last_history_item
+        abbr -a vim --position anywhere nvim
 
         set fish_cursor_default block
         set fish_cursor_insert block blink
