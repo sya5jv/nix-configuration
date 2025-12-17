@@ -263,8 +263,6 @@
     # Wayland Compositor
     niri.enable = true;
 
-    ghostty.enable = true;
-
   };
 
   networking = {
