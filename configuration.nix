@@ -211,9 +211,8 @@
     fish        # Shell
     vim         # Text editor
     neovim      # Text editor
-    fastfetch   # System monitoring
-    ghostty     # Terminal emulator
     tmux        # Terminal multiplexer
+    ghostty     # Terminal emulator
     git         # Version control
     zoxide      # CLI utility
     fzf         # CLI utility
@@ -240,7 +239,7 @@
 
     # ssh-agent
     ssh = {
-      startAgent = true;
+      startAgent = false;
       extraConfig = ''
         Host github.com
           IdentityFile ~/.ssh/id_ed25519_20251214
