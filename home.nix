@@ -11,6 +11,9 @@
       tmux
       neovim
       git
+      alacritty
+      ghostty
+      rofi
 
       # CLI Utilities
       fastfetch
@@ -108,6 +111,10 @@
         la = "eza --long -ag";
       };
     };
+
+    alacritty.enable = false;
+    ghostty.enable = true;
+    rofi.enable = true;
 
   };
 
