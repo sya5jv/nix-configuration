@@ -70,6 +70,7 @@
 
         set -g fish_key_bindings fish_vi_key_bindings
         zoxide init --cmd cd fish | source
+        abbr -a --position anywhere vim nvim
         abbr -a --position anywhere ... ../..
         abbr -a --position anywhere .... ../../..
         abbr -a --position anywhere ..... ../../../..
