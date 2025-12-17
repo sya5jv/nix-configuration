@@ -35,7 +35,7 @@
             users.syahn = import ./home.nix;
             backupFileExtension = "backup";
           };
-        };
+        }
 
       ];
 
