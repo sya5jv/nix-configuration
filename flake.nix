@@ -13,7 +13,8 @@
     ghostty.url = "github:ghostty-org/ghostty";
 
     quickshell = {
-      url = "github:outfoxxed/quickshell";
+      # url = "github:outfoxxed/quickshell";
+      url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

@@ -111,7 +111,6 @@
     };
 
     alacritty.enable = true;
-    ghostty.enable = true;
     # rofi.enable = true;
 
   };
