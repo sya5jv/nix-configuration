@@ -10,6 +10,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    ghostty.url = "github:ghostty-org/ghostty";
+
     quickshell = {
       url = "github:outfoxxed/quickshell";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -25,7 +27,14 @@
 
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, nixos-hardware, ... }: {
+  outputs = inputs@{ 
+    self,
+    nixpkgs,
+    home-manager,
+    nixos-hardware,
+    ghostty,
+    ...
+  }: {
 
     nixosConfigurations.lemontree = nixpkgs.lib.nixosSystem {
 
@@ -48,6 +57,12 @@
             backupFileExtension = "backup";
           };
         }
+
+        ({ pkgs, ... }: {
+          environment.systemPackages = [
+            ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default
+          ];
+        })
 
         nixos-hardware.nixosModules.lenovo-thinkpad-p14s-amd-gen5
 

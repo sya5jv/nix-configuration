@@ -12,8 +12,6 @@
       neovim
       git
       alacritty
-      ghostty
-      rofi
 
       # CLI Utilities
       fastfetch
@@ -112,9 +110,9 @@
       };
     };
 
-    alacritty.enable = false;
+    alacritty.enable = true;
     ghostty.enable = true;
-    rofi.enable = true;
+    # rofi.enable = true;
 
   };
 
