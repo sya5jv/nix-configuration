@@ -37,7 +37,7 @@
         enrollConfig = true;
         secureBoot.enable= true;
       };
-      systemd-boot.enable = true;
+      # systemd-boot.enable = true;   # This bootloader conflicts with Limine
       efi.canTouchEfiVariables = true;
     };
 
