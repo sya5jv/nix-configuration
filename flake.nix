@@ -23,7 +23,7 @@
 
   };
 
-  outputs = 
+  outputs =
     inputs:
     let
       inherit (inputs.nixpkgs) lib;
@@ -40,7 +40,21 @@
       system = lib.system.flakeExposed;
 
       flake = {
+
+        # Lemontree host configurations
+        nixosConfigurations.lemontree = lib.nixosSystem {
+          modules = [ ./hosts/lemontree ];
+          inherit specialArgs;
+        };
+
       };
+
+      perSystem =
+        { pkgs, ... }:
+        {
+          packages = packages' pkgs;
+        };
+
     };
 
 }
