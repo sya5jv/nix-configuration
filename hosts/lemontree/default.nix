@@ -98,14 +98,21 @@
 
   hardware.bluetooth.enable = true;
 
-  # Hibernation related settings disabled until
-  # secureboot and auto-decryption is handled
-  systemd.sleep.extraConfig = ''
-    AllowSuspend=yes
-    AllowHibernation=no
-    AllowHybridSleep=hibernation=no
-    AllowSuspendThenHibernation=no
-  '';
+  systemd = {
+
+    # Hibernation related settings disabled until
+    # secureboot and auto-decryption is handled
+    sleep.extraConfig = ''
+      AllowSuspend=yes
+      AllowHibernation=no
+      AllowHybridSleep=hibernation=no
+      AllowSuspendThenHibernation=no
+    '';
+
+    # Automatically update timezone based on physical location
+    services.automatic-timezoned.enable = true;
+
+  };
 
   security = {
     tpm2 = {
@@ -117,6 +124,8 @@
       tctiEnvironment.enable = true;
       tctiEnvironment.interface = "tabrmd";
     };
+
+    rtkit.enable = true;  # Real-time Audio software occasionally relies on this
   };
 
   powerManagement = {
