@@ -1,74 +1,46 @@
 {
-  description = "NixOS configuration";
+
+  description = "Flake based on Leah's NixOS configurations. See https://github.com/pluiedev/flake/blob/main/flake.nix"
 
   inputs = {
 
-    nixpkgs.url = "nixpkgs/nixos-unstable";
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follow = "nixpkgs";
+    };
 
-    home-manager = {
-      url = "github:nix-community/home-manager";
+    ghostty = {
+      url = "github:ghostty-org/ghostty";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    ghostty.url = "github:ghostty-org/ghostty";
-
-    quickshell = {
-      # url = "github:outfoxxed/quickshell";
-      url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    noctalia = {
-      url = "github:noctalia-dev/noctalia-shell";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.quickshell.follows = "quickshell";
-    };
-
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nixos-hardware.url = "github:nix-community/nixos-hardware/master";
 
   };
 
-  outputs = inputs@{ 
-    self,
-    nixpkgs,
-    home-manager,
-    nixos-hardware,
-    ghostty,
-    ...
-  }: {
-
-    nixosConfigurations.lemontree = nixpkgs.lib.nixosSystem {
-
-      system = "x86_64-linux";
-
+  outputs = 
+    inputs:
+    let
+      inherit (inputs.nixpkgs) lib;
+      packages' =
+        pkgs':
+        pkgs'.lib.packagesFromDirectoryRecursive {
+          inherit (pkgs') callPackages;
+          directory = ./packages;
+        };
       specialArgs = { inherit inputs; };
+    in
+    inputs.flake-parts.lib.mkFlare { inherit inputs; } {
 
-      modules = [
+      system = lib.system.flakeExposed;
 
-        ./configuration.nix
-
-        # ./noctalia.nix
-
-        home-manager.nixosModules.home-manager
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            users.syahn = import ./home.nix;
-            backupFileExtension = "backup";
-          };
-        }
-
-        ({ pkgs, ... }: {
-          environment.systemPackages = [
-            ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default
-          ];
-        })
-
-        nixos-hardware.nixosModules.lenovo-thinkpad-p14s-amd-gen5
-
-      ];
-
+      flake = {
+      };
     };
-  };
+
 }
