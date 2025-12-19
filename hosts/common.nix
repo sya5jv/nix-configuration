@@ -23,7 +23,7 @@
     config.allowUnfree = true;
     flake.setNixPath = true;
 
-    overlays = [ inputs.self.overlays.default ];
+    # overlays = [ inputs.self.overlays.default ];
 
   };
 
@@ -46,8 +46,10 @@
 
   # Disabled until further research
   system = {
-    autoUpgrade = false;
-    flags = [ "--refresh" ];
+    autoUpgrade = {
+      enable = false;
+      flags = [ "--refresh" ];
+    };
   };
 
   system.stateVersion = "25.11";

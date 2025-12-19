@@ -1,25 +1,26 @@
 {
 
-  description = "Flake based on Leah's NixOS configurations. See https://github.com/pluiedev/flake/blob/main/flake.nix"
+  description = "Flake based on Leah's NixOS configurations. See https://github.com/pluiedev/flake/blob/main/flake.nix";
 
   inputs = {
 
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
-      inputs.nixpkgs-lib.follow = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     ghostty = {
       url = "github:ghostty-org/ghostty";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-index-database = {
-      url = "github:nix-community/nix-index-database";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # nix-index-database = {
+    #   url = "github:nix-community/nix-index-database";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
-    nixos-hardware.url = "github:nix-community/nixos-hardware/master";
+    nixos-hardware.url = "github:NixOS/nixos-hardware";
 
   };
 
@@ -35,9 +36,9 @@
         };
       specialArgs = { inherit inputs; };
     in
-    inputs.flake-parts.lib.mkFlare { inherit inputs; } {
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
 
-      system = lib.system.flakeExposed;
+      systems = lib.systems.flakeExposed;
 
       flake = {
 
@@ -49,11 +50,11 @@
 
       };
 
-      perSystem =
-        { pkgs, ... }:
-        {
-          packages = packages' pkgs;
-        };
+      # perSystem =
+      #   { pkgs, ... }:
+      #   {
+      #     packages = packages' pkgs;
+      #   };
 
     };
 
