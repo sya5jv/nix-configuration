@@ -25,7 +25,7 @@
     nixpkgs,
     home-manager,
     nixos-hardware,
-    ghostty,
+    # ghostty,
     ...
   }: {
 
@@ -51,11 +51,11 @@
           };
         }
 
-        ({ pkgs, ... }: {
-          environment.systemPackages = [
-            ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default
-          ];
-        })
+        # ({ pkgs, ... }: {
+        #   environment.systemPackages = [
+        #     ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default
+        #   ];
+        # })
 
         nixos-hardware.nixosModules.lenovo-thinkpad-p14s-amd-gen5
 
