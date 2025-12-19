@@ -230,6 +230,7 @@
     tpm2-tss    # TPM2 manager
     tpm2-tools  # TPM2 Utilities
     niri        # Wayland Compositor
+    quickshell  # Wayland shell program
     ly          # TUI Display Manager
     xwayland-satellite  # Wayland support for X11 Programs
 
