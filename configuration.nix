@@ -37,6 +37,8 @@
   # Device hibernation
   # boot.resumeDevice = "/dev/dm-1";  # WIP: Need to look at TPM in order to look at automatic device unlocking
 
+  time.timeZone = "US/Eastern";
+
   fileSystems = {
     "/".options = [ "compress=zstd" ];
     "/home".options = [ "compress=zstd" ];
@@ -58,141 +60,147 @@
     '';
   };
 
-  # services.tuned.enable = true;
+  services = {
 
-  services.upower.enable = true;
+    # tuned.enable = true;
 
-  # services.tlp = {
-  #   enable = true;
-  #   settings = {
-  #     # CPU scaling driver operating mode (adjusts processor freqs)
-  #     CPU_DRIVER_OPMODE_ON_AC = "active";
-  #     CPU_DRIVER_OPMODE_ON_BAT = "active";
-  #     CPU_DRIVER_OPMODE_ON_SAV = "guided";
+    upower.enable = true;
 
-  #     # CPU usage governor (rate limiter) settings
-  #     CPU_SCALING_GOVERNOR_ON_AC = "performance";
-  #     CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
-  #     CPU_SCALING_GOVERNOR_ON_SAV = "powersave";
+    # tlp = {
+    #   enable = true;
+    #   settings = {
+    #     # CPU scaling driver operating mode (adjusts processor freqs)
+    #     CPU_DRIVER_OPMODE_ON_AC = "active";
+    #     CPU_DRIVER_OPMODE_ON_BAT = "active";
+    #     CPU_DRIVER_OPMODE_ON_SAV = "guided";
 
-  #     # CPU energy performance policies
-  #     CPU_ENERGY_PERF_POLICY_ON_AC = "balanced_performance";
-  #     CPU_ENERGY_PERF_POLICY_ON_BAT = "balanced_power";
-  #     CPU_ENERGY_PERF_POLICY_ON_SAV = "power";
+    #     # CPU usage governor (rate limiter) settings
+    #     CPU_SCALING_GOVERNOR_ON_AC = "performance";
+    #     CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+    #     CPU_SCALING_GOVERNOR_ON_SAV = "powersave";
 
-  #     # Charging thresholds
-  #     START_CHARGE_THRESH_BAT0 = 75;
-  #     STOP_CHARGE_THRESH_BAT0 = 80;
+    #     # CPU energy performance policies
+    #     CPU_ENERGY_PERF_POLICY_ON_AC = "balanced_performance";
+    #     CPU_ENERGY_PERF_POLICY_ON_BAT = "balanced_power";
+    #     CPU_ENERGY_PERF_POLICY_ON_SAV = "power";
 
-  #     # Restore configured thresholds when AC is unplugged
-  #     RESTORE_THRESHOLDS_ON_BAT = 1;
+    #     # Charging thresholds
+    #     START_CHARGE_THRESH_BAT0 = 75;
+    #     STOP_CHARGE_THRESH_BAT0 = 80;
 
-  #     # NATACPI and TPSMAPI battery care drivers
-  #     NATACPI_ENABLE = 1;   # All supported laptops
-  #     TPSMAPI_ENABLE = 1;   # ThinkPad specific
+    #     # Restore configured thresholds when AC is unplugged
+    #     RESTORE_THRESHOLDS_ON_BAT = 1;
 
-  #     # AMD GPU related settings
-  #     RADEON_DPM_PERF_LEVEL_ON_AC="auto";
-  #     RADEON_DPM_PERF_LEVEL_ON_BAT="auto";
-  #     RADEON_DPM_STATE_ON_AC="performance";
-  #     RADEON_DPM_STATE_ON_BAT="balanced";
-  #     ADMGPU_ABM_LEVEL_ON_AC=0;
-  #     ADMGPU_ABM_LEVEL_ON_BAT=1;
-  #     ADMGPU_ABM_LEVEL_ON_SAV=3;
+    #     # NATACPI and TPSMAPI battery care drivers
+    #     NATACPI_ENABLE = 1;   # All supported laptops
+    #     TPSMAPI_ENABLE = 1;   # ThinkPad specific
 
-  #     # Platform settings 
-  #     # (OS characteristics around power/performance levels, thermal, and fan speed)
-  #     PLATFORM_PROFILE_ON_AC="performance";
-  #     PLATFORM_PROFILE_ON_BAT="balanced";
-  #     PLATFORM_PROFILE_ON_SAV="low-power";
+    #     # AMD GPU related settings
+    #     RADEON_DPM_PERF_LEVEL_ON_AC="auto";
+    #     RADEON_DPM_PERF_LEVEL_ON_BAT="auto";
+    #     RADEON_DPM_STATE_ON_AC="performance";
+    #     RADEON_DPM_STATE_ON_BAT="balanced";
+    #     ADMGPU_ABM_LEVEL_ON_AC=0;
+    #     ADMGPU_ABM_LEVEL_ON_BAT=1;
+    #     ADMGPU_ABM_LEVEL_ON_SAV=3;
 
-  #     # Default sleep profiles
-  #     MEM_SLEEP_ON_AC="deep";
-  #     MEM_SLEEP_ON_BAT="deep";
+    #     # Platform settings 
+    #     # (OS characteristics around power/performance levels, thermal, and fan speed)
+    #     PLATFORM_PROFILE_ON_AC="performance";
+    #     PLATFORM_PROFILE_ON_BAT="balanced";
+    #     PLATFORM_PROFILE_ON_SAV="low-power";
 
-  #     # Radio devices settings
-  #     RESTORE_DEVICE_STATE_ON_STARTUP = 1;
-  #     DEVICES_TO_ENABLE_ON_STARTUP = "bluetooth wifi wwan";
-  #   };
-  # };
+    #     # Default sleep profiles
+    #     MEM_SLEEP_ON_AC="deep";
+    #     MEM_SLEEP_ON_BAT="deep";
 
-  # Laptop lid power settings
-  services.logind.settings.Login = {
-    HandleLidSwitch = "suspend";
-    HandleLidSwitchExternalPower = "suspend";
-    HandleLidSwitchDocked = "ignore";
-  };
+    #     # Radio devices settings
+    #     RESTORE_DEVICE_STATE_ON_STARTUP = 1;
+    #     DEVICES_TO_ENABLE_ON_STARTUP = "bluetooth wifi wwan";
+    #   };
+    # };
 
-  # BTRFS automatic data integrity checking
-  services.btrfs.autoScrub = {
-    enable = false;
-    interval = "monthly";
-    fileSystems = [ "/" ];
-  };
-
-  # Enable the OpenSSH daemon.
-  services.openssh = {
-    enable = true;
-    ports = [ 22 ];
-    settings = {
-      PasswordAuthentication = true;  # should be false
-      KbdInteractiveAuthentication = false;  # should be false
-      PermitRootLogin = "no";
-      AllowUsers = [ "syahn" ];
+    # Laptop lid power settings
+    logind.settings.Login = {
+      HandleLidSwitch = "suspend";
+      HandleLidSwitchExternalPower = "suspend";
+      HandleLidSwitchDocked = "ignore";
     };
-  };
 
-  services.fail2ban = {
-    enable = true;
-    # Ban IP after 5 failures
-    maxretry = 5;
-    ignoreIP = [
-      "127.0.0.0/8"   # Default made explicit
-      "::1"           # Default made explicit
-      "192.168.0.0/16"
-    ];
-    bantime = "24h";
-    bantime-increment = {
-      enable = true;        # Enable increment of bantime after each violation
-      # formula = "ban.Time * math.exp(float(ban.Count+1)*banFactor)/math.exp(1*banFactor)";
-      multipliers = "1 2 4 8 16 32 64";
-      maxtime = "168h";     # One week
-      overalljails = true;  # Calculate the bantime based on all the violations
+    # BTRFS automatic data integrity checking
+    btrfs.autoScrub = {
+      enable = false;
+      interval = "monthly";
+      fileSystems = [ "/" ];
     };
-    jails = {
-      sshd.settings = {
-        # Block an IP address if it accesses a non-extistent
-        # home directory more than 5 times in 10 minutes
-        # since that indicates that it's scanning
-        enabled = "false";
-        port = "ssh";
-        filter = "sshd";
-        logpath = "/var/log/auth.log";
-        maxretry = 5;
-        findtime = 300;
-        bantime = 3600;
-        ignoreip = "127.0.0.1";
+
+    # Enable the OpenSSH daemon.
+    openssh = {
+      enable = true;
+      ports = [ 22 ];
+      settings = {
+        PasswordAuthentication = true;  # should be false
+        KbdInteractiveAuthentication = false;  # should be false
+        PermitRootLogin = "no";
+        AllowUsers = [ "syahn" ];
       };
     };
+
+    fail2ban = {
+      enable = true;
+      # Ban IP after 5 failures
+      maxretry = 5;
+      ignoreIP = [
+        "127.0.0.0/8"   # Default made explicit
+        "::1"           # Default made explicit
+        "192.168.0.0/16"
+      ];
+      bantime = "24h";
+      bantime-increment = {
+        enable = true;        # Enable increment of bantime after each violation
+        # formula = "ban.Time * math.exp(float(ban.Count+1)*banFactor)/math.exp(1*banFactor)";
+        multipliers = "1 2 4 8 16 32 64";
+        maxtime = "168h";     # One week
+        overalljails = true;  # Calculate the bantime based on all the violations
+      };
+      jails = {
+        sshd.settings = {
+          # Block an IP address if it accesses a non-extistent
+          # home directory more than 5 times in 10 minutes
+          # since that indicates that it's scanning
+          enabled = "false";
+          port = "ssh";
+          filter = "sshd";
+          logpath = "/var/log/auth.log";
+          maxretry = 5;
+          findtime = 300;
+          bantime = 3600;
+          ignoreip = "127.0.0.1";
+        };
+      };
+    };
+
+    # Enable the X11 windowing system.
+    # xserver.enable = true;
+
+    # Configure keymap in X11
+    xserver.xkb.layout = "us";
+
+    displayManager.ly.enable = true;
+
+    # Enable CUPS to print documents.
+    # printing.enable = true;
+
+    # Enable sound.
+    pipewire = {
+      enable = true;
+      pulse.enable = true;
+    };
+
+    # Enable touchpad support (enabled default in most desktopManager).
+    libinput.enable = true;
+
   };
-
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-
-  # Configure keymap in X11
-  services.xserver.xkb.layout = "us";
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
-  # Enable sound.
-  services.pipewire = {
-    enable = true;
-    pulse.enable = true;
-  };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  services.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.syahn = {
@@ -214,23 +222,15 @@
   environment.systemPackages = with pkgs; [
     fish        # Shell
     vim         # Text editor
-    neovim      # Text editor
     tmux        # Terminal multiplexer
-    ghostty     # Terminal emulator
     git         # Version control
-    zoxide      # CLI utility
-    fzf         # CLI utility
     wget        # CLI utility
-    bat         # CLI utility
     tree        # CLI utility
-    dysk        # System monitoring
-    btop        # System monitoring
     which       # CLI utility
     sbctl       # Secure boot manager
     tpm2-tss    # TPM2 manager
     tpm2-tools  # TPM2 Utilities
     niri        # Wayland Compositor
-    quickshell  # Wayland shell program
     ly          # TUI Display Manager
     xwayland-satellite  # Wayland support for X11 Programs
 
