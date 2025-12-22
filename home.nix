@@ -12,6 +12,7 @@
       neovim
       git
       alacritty
+      ghostty
 
       # CLI Utilities
       fastfetch
@@ -21,6 +22,7 @@
       tree
       which
       eza
+      lazygit
 
       # System Monitoring
       btop
@@ -58,6 +60,10 @@
       #   ];
       #   text = builtins.readFile "{pkgs.nix-search-tv.src}/nixpkgs.sh";
       # })
+
+      # Programs
+      vesktop
+      fuzzel
 
     ];
 

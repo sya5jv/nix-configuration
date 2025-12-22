@@ -52,6 +52,10 @@
     AllowSuspendThenHibernation=no
   '';
 
+  systemd.services.gnome-remote-desktop = {
+    wantedBy = [ "graphical.target" ];
+  };
+
   powerManagement = {
     enable = true;
     powertop.enable = true;
@@ -65,60 +69,6 @@
     # tuned.enable = true;
 
     upower.enable = true;
-
-    # tlp = {
-    #   enable = true;
-    #   settings = {
-    #     # CPU scaling driver operating mode (adjusts processor freqs)
-    #     CPU_DRIVER_OPMODE_ON_AC = "active";
-    #     CPU_DRIVER_OPMODE_ON_BAT = "active";
-    #     CPU_DRIVER_OPMODE_ON_SAV = "guided";
-
-    #     # CPU usage governor (rate limiter) settings
-    #     CPU_SCALING_GOVERNOR_ON_AC = "performance";
-    #     CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
-    #     CPU_SCALING_GOVERNOR_ON_SAV = "powersave";
-
-    #     # CPU energy performance policies
-    #     CPU_ENERGY_PERF_POLICY_ON_AC = "balanced_performance";
-    #     CPU_ENERGY_PERF_POLICY_ON_BAT = "balanced_power";
-    #     CPU_ENERGY_PERF_POLICY_ON_SAV = "power";
-
-    #     # Charging thresholds
-    #     START_CHARGE_THRESH_BAT0 = 75;
-    #     STOP_CHARGE_THRESH_BAT0 = 80;
-
-    #     # Restore configured thresholds when AC is unplugged
-    #     RESTORE_THRESHOLDS_ON_BAT = 1;
-
-    #     # NATACPI and TPSMAPI battery care drivers
-    #     NATACPI_ENABLE = 1;   # All supported laptops
-    #     TPSMAPI_ENABLE = 1;   # ThinkPad specific
-
-    #     # AMD GPU related settings
-    #     RADEON_DPM_PERF_LEVEL_ON_AC="auto";
-    #     RADEON_DPM_PERF_LEVEL_ON_BAT="auto";
-    #     RADEON_DPM_STATE_ON_AC="performance";
-    #     RADEON_DPM_STATE_ON_BAT="balanced";
-    #     ADMGPU_ABM_LEVEL_ON_AC=0;
-    #     ADMGPU_ABM_LEVEL_ON_BAT=1;
-    #     ADMGPU_ABM_LEVEL_ON_SAV=3;
-
-    #     # Platform settings 
-    #     # (OS characteristics around power/performance levels, thermal, and fan speed)
-    #     PLATFORM_PROFILE_ON_AC="performance";
-    #     PLATFORM_PROFILE_ON_BAT="balanced";
-    #     PLATFORM_PROFILE_ON_SAV="low-power";
-
-    #     # Default sleep profiles
-    #     MEM_SLEEP_ON_AC="deep";
-    #     MEM_SLEEP_ON_BAT="deep";
-
-    #     # Radio devices settings
-    #     RESTORE_DEVICE_STATE_ON_STARTUP = 1;
-    #     DEVICES_TO_ENABLE_ON_STARTUP = "bluetooth wifi wwan";
-    #   };
-    # };
 
     # Laptop lid power settings
     logind.settings.Login = {
@@ -180,16 +130,24 @@
       };
     };
 
-    # Enable the X11 windowing system.
-    # xserver.enable = true;
 
-    # Configure keymap in X11
-    xserver.xkb.layout = "us";
+    xserver = {
+      xkb.layout = "us,us";  # Configure keymap in X11
+      xkbVariant = ",colemak_dh";  # Configure keymap in X11
+      xkbOptions = "grp:alts_toggle";  # Configure keymap in X11
+    };
 
-    displayManager.ly.enable = true;
+    gnome = {
+      gnome-remote-desktop.enable = true;
+      gnome-keyring.enable = true;
+    };
 
-    # Enable CUPS to print documents.
-    # printing.enable = true;
+    displayManager = {
+      ly.enable = true;
+      autoLogin.enable = false;
+    };
+
+    getty.autologinUser = null;
 
     # Enable sound.
     pipewire = {
@@ -230,16 +188,44 @@
     sbctl       # Secure boot manager
     tpm2-tss    # TPM2 manager
     tpm2-tools  # TPM2 Utilities
-    niri        # Wayland Compositor
     ly          # TUI Display Manager
-    xwayland-satellite  # Wayland support for X11 Programs
+
+    # Desktop Envionment Packages
+
+    niri        # Wayland Compositor
+    mako        # Desktop Notification Service
+    swaybg      # Background Software
+    swayidle    # Desktop Idle Status
+    swaylock    # Desktop Lock Screen
+    xdg-desktop-portal-gtk    # XDG Desktop Portal for Screen Sharing
+    xdg-desktop-portal-gnome  # XDG Desktop Portal for Screen Sharing 
+    xwayland-satellite        # Wayland support for X11 Programs
+    udiskie     # Manage and Auto-mount USB Drives
 
     inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default  # Noctalia shell input from flake.nix
+    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
   ];
+
+  xdg.portal = {
+    enable = true;
+    xdgOpenUsePortal = true;
+    config = {
+      common.default = [ "gtk" ];
+      niri.default = [ "gnome" "gtk" ];
+    };
+    configPackages = [
+      pkgs.xdg-desktop-portal-gtk
+      pkgs.xdg-desktop-portal-gnome
+    ];
+    extraPortals = [
+      pkgs.xdg-desktop-portal-gtk
+      pkgs.xdg-desktop-portal-gnome
+    ];
+  };
 
   programs = {
 
@@ -275,7 +261,7 @@
 
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 22 ];
+      allowedTCPPorts = [ 22 3389 ];
       # allowedUDPPorts = [ ... ];
     };
   };
@@ -292,66 +278,14 @@
       tctiEnvironment.enable = true;
       tctiEnvironment.interface = "tabrmd";
     };
+
+    polkit.enable = true;
+
+    pam.services.swaylock = {};
+
   };
 
   system.stateVersion = "25.11"; # Did you read the comment?
 
 }
 
-# Archived comments from nixos-generate-config
-
-# Edit this configuration file to define what should be installed on
-# your system. Help is available in the configuration.nix(5) man page, on
-# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-
-# Some programs need SUID wrappers, can be configured further or are
-# started in user sessions.
-# mtr.enable = true;
-# gnupg.agent = {
-#   enable = true;
-#   enableSSHSupport = true;
-# };
-
-# Configure network proxy if necessary
-# From default 'configuration.nix'
-# proxy = {
-#   default = "http://user:password@proxy:port/";
-#   noProxy = "127.0.0.1,localhost,internal.domain";
-# };
-
-# Configure nftables
-# https://nixos.wiki/wiki/Networking
-# nftables = {
-#   enable = true;
-#   ruleset = ''
-#       table ip nat {
-#         chain PREROUTING {
-#           type nat hook prerouting priority dstnat; policy accept;
-#           iifname "ens3" tcp dport 80 dnat to 10.100.0.3:80
-#         }
-#       }
-#     '';
-# };
-
-# Copy the NixOS configuration file and link it from the resulting system
-# (/run/current-system/configuration.nix). This is useful in case you
-# accidentally delete configuration.nix.
-# system.copySystemConfiguration = true;
-
-# This option defines the first version of NixOS you have installed on this particular machine,
-# and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
-#
-# Most users should NEVER change this value after the initial install, for any reason,
-# even if you've upgraded your system to a new NixOS release.
-#
-# This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
-# so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
-# to actually do that.
-#
-# This value being lower than the current NixOS release does NOT mean your system is
-# out of date, out of support, or vulnerable.
-#
-# Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
-# and migrated your data accordingly.
-#
-# For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
