@@ -132,9 +132,11 @@
 
 
     xserver = {
-      xkb.layout = "us,us";  # Configure keymap in X11
-      xkbVariant = ",colemak_dh";  # Configure keymap in X11
-      xkbOptions = "grp:alts_toggle";  # Configure keymap in X11
+      xkb = {
+        layout = "us,us";  # Configure keymap in X11
+        variant = ",colemak_dh";  # Configure keymap in X11
+        options = "grp:alts_toggle";  # Configure keymap in X11
+      };
     };
 
     gnome = {
