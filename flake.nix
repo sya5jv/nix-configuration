@@ -53,12 +53,6 @@
           };
         }
 
-        # ({ pkgs, ... }: {
-        #   environment.systemPackages = [
-        #     ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default
-        #   ];
-        # })
-
         nixos-hardware.nixosModules.lenovo-thinkpad-p14s-amd-gen5
 
       ];
