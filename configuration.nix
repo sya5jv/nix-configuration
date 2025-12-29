@@ -66,7 +66,7 @@
 
   services = {
 
-    # tuned.enable = true;
+    fwupd.enable = true;
 
     upower.enable = true;
 
