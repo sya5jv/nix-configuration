@@ -189,6 +189,8 @@
     tpm2-tss    # TPM2 manager
     tpm2-tools  # TPM2 Utilities
     ly          # TUI Display Manager
+    brightnessctl   # Screen brightness utility used by ly
+    ffmpeg-full # Media functionality
 
     # Desktop Envionment Packages
 
