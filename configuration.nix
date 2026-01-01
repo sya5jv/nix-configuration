@@ -66,6 +66,8 @@
 
   services = {
 
+    fprintd.enable = true;
+
     fwupd.enable = true;
 
     upower.enable = true;
@@ -205,7 +207,6 @@
     xdg-desktop-portal-gnome  # XDG Desktop Portal for Screen Sharing 
     xwayland-satellite        # Wayland support for X11 Programs
     udiskie     # Manage and Auto-mount USB Drives
-    # posy-cursors  # Posy's mouse cursors for Linux
 
     inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default  # Noctalia shell input from flake.nix
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
