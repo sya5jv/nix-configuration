@@ -23,6 +23,7 @@
       which
       eza
       lazygit
+      yazi
 
       # System Monitoring
       btop
@@ -129,7 +130,7 @@
     };
 
     alacritty.enable = true;
-    # rofi.enable = true;
+    yazi.enable = true;
 
   };
 
