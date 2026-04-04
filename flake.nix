@@ -1,62 +1,16 @@
 {
-  description = "NixOS configuration";
-
   inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    nixpkgs.url = "nixpkgs/nixos-unstable";
+    # Core components for the Dendritic pattern
+    flake-parts.url = "github:hercules-ci/flake-parts";   # flake-parts url
+    import-tree.url = "github:vic/import-tree";           # recursive module importing
 
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    noctalia = {
-      url = "github:noctalia-dev/noctalia-shell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-
-    zen-browser = {
-      url = "github:0xc000022070/zen-browser-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
+    wrapper-modules.url = "github:BirdeeHub/nix-wrapper-modules";   # configuring programs
   };
 
-  outputs = inputs@{ 
-    self,
-    nixpkgs,
-    home-manager,
-    nixos-hardware,
-    # ghostty,
-    ...
-  }: {
-
-    nixosConfigurations.lemontree = nixpkgs.lib.nixosSystem {
-
-      system = "x86_64-linux";
-
-      specialArgs = { inherit inputs; };
-
-      modules = [
-
-        ./configuration.nix
-
-        home-manager.nixosModules.home-manager
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            users.syahn = import ./home.nix;
-            backupFileExtension = "backup";
-          };
-        }
-
-        nixos-hardware.nixosModules.lenovo-thinkpad-p14s-amd-gen5
-
-      ];
-
-    };
-  };
+  # Import modules/ automatically
+  outputs = inputs: inputs.flake-parts.lib.mkFlake 
+    {inherit inputs;} 
+    (inputs.import-tree ./modules);
 }
