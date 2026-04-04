@@ -147,7 +147,20 @@
     };
 
     displayManager = {
-      ly.enable = true;
+      ly = {
+        enable = true;
+        settings = {
+          battery_id = "BAT0";
+          brightness_up_cmd = "brightnessctl -q -n s 5%+";
+          brightness_down_cmd = "brightnessctl -q -n s 5%-";
+          clear_password = true;
+          clock = "%c";
+          default_input = "password";
+          save = true;
+          vi_mode = true;
+          vi_default_mode = "insert";
+        };
+      };
       autoLogin.enable = false;
     };
 
@@ -207,9 +220,20 @@
     xdg-desktop-portal-gnome  # XDG Desktop Portal for Screen Sharing 
     xwayland-satellite        # Wayland support for X11 Programs
     udiskie     # Manage and Auto-mount USB Drives
+    parted
+    hdparm
+    libarchive
 
     inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default  # Noctalia shell input from flake.nix
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
+  ];
+
+  nixpkgs.config.allowUnfreePredicate = pkgs: builtins.elem (lib.getName pkgs) [
+    "steam"
+    "steam-original"
+    "steam-run"
+    "steam-unwrapped"
+    "spotify"
   ];
 
   fonts.packages = with pkgs; [
@@ -255,6 +279,14 @@
 
     # Wayland Compositor
     niri.enable = true;
+
+    steam = {
+      enable = true;
+      remotePlay.openFirewall = true;
+      dedicatedServer.openFirewall = true;
+    };
+
+    gamemode.enable = true;
 
   };
 
