@@ -130,7 +130,10 @@
     };
 
     alacritty.enable = true;
-    yazi.enable = true;
+    yazi = {
+      enable = true;
+      shellWrapperName = "y";
+    };
 
   };
 

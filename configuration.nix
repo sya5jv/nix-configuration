@@ -184,7 +184,7 @@
       "tss"
     ];
     shell = pkgs.fish;
-    # openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKsUBONtlC6T4CvTGGkRFcsHYhJiz9KZ+JqJzHOXVOqA syahn-2025-12-13" ];
+    openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKsUBONtlC6T4CvTGGkRFcsHYhJiz9KZ+JqJzHOXVOqA syahn-2025-12-13" ];
   };
 
   # List packages installed in system profile.
@@ -260,6 +260,8 @@
       extraConfig = ''
         Host github.com
           IdentityFile ~/.ssh/id_ed25519_20251214
+          AddKeysToAgent yes
+          User git
       '';
     };
 
