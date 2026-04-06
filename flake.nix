@@ -2,15 +2,11 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    # Core components for the Dendritic pattern
-    flake-parts.url = "github:hercules-ci/flake-parts";   # flake-parts url
-    import-tree.url = "github:vic/import-tree";           # recursive module importing
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    import-tree.url = "github:vic/import-tree";
 
-    wrapper-modules.url = "github:BirdeeHub/nix-wrapper-modules";   # configuring programs
+    wrapper-modules.url = "github:BirdeeHub/nix-wrapper-modules";
   };
 
-  # Import modules/ automatically
-  outputs = inputs: inputs.flake-parts.lib.mkFlake 
-    {inherit inputs;} 
-    (inputs.import-tree ./modules);
+  outputs = inputs: inputs.flake-parts.lib.mkFlake {inherit inputs;} (inputs.import-tree ./modules);
 }
