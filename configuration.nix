@@ -45,12 +45,7 @@
     "/nix".options = [ "compress=zstd" "noatime" ];
   };
 
-  systemd.sleep.extraConfig = ''
-    AllowSuspend=yes
-    AllowHibernation=no
-    AllowHybridSleep=no
-    AllowSuspendThenHibernation=no
-  '';
+  systemd.sleep.settings.Sleep.enable = true;
 
   systemd.services.gnome-remote-desktop = {
     wantedBy = [ "graphical.target" ];
