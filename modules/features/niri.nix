@@ -20,7 +20,7 @@
           (lib.getExe self'.packages.myNoctalia)
         ];
 
-        xwayland-satellite.path = lib.getExe pkgs.wayland-satellite;
+        xwayland-satellite.path = lib.getExe pkgs.xwayland-satellite;
 
         input.keyboard = {
           xkb.layout= "us";
