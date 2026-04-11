@@ -6,9 +6,9 @@
 
       inherit pkgs;
 
-      settings =
-        (builtins.fromJSON
-          (builtins.readFile ./noctalia.json)).settings;
+      # settings =
+      #   (builtins.fromJSON
+      #     (builtins.readFile ./noctalia.json)).settings;
 
     };  # packages.myNoctalia
 
