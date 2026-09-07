@@ -18,6 +18,26 @@
         "type": "github"
       }
     },
+    "hjem": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1784171173,
+        "narHash": "sha256-EyBAHpQYuXAdQlIx/sja+Auw9IpHJGjE4PZ9g39I7sQ=",
+        "owner": "feel-co",
+        "repo": "hjem",
+        "rev": "57f1dacffe7a2d7ad803ad224a0efa1817aa4d07",
+        "type": "github"
+      },
+      "original": {
+        "owner": "feel-co",
+        "repo": "hjem",
+        "type": "github"
+      }
+    },
     "import-tree": {
       "locked": {
         "lastModified": 1773693634,
@@ -30,6 +50,26 @@
       "original": {
         "owner": "vic",
         "repo": "import-tree",
+        "type": "github"
+      }
+    },
+    "nix-index-database": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783864904,
+        "narHash": "sha256-BQxN5UMg9FOevAsgBRwPxfxlh51Puj+dNn/8Dsi3sPM=",
+        "owner": "nix-community",
+        "repo": "nix-index-database",
+        "rev": "1111b9bc836afb7e31a7014e8d1272de9b1c917d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nix-index-database",
         "type": "github"
       }
     },
@@ -83,7 +123,9 @@
     "root": {
       "inputs": {
         "flake-parts": "flake-parts",
+        "hjem": "hjem",
         "import-tree": "import-tree",
+        "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs",
         "wrapper-modules": "wrapper-modules"
       }

@@ -76,7 +76,7 @@
 
           CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
           CPU_ENERGY_PERF_POLICY_ON_BAT = "powersave";
-          START_CHARGE_THRESH_BAT0 = 40;
+          START_CHARGE_THRESH_BAT0 = 75;
           STOP_CHARGE_THRESH_BAT0 = 80;
 
           # Restore configured thresholds when AC is unplugged
