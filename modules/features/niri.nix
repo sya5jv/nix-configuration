@@ -14,27 +14,7 @@
       inherit pkgs;
 
       # Niri KDL settings file contents here
-      settings = {
-
-        spawn-at-startup = [
-          (lib.getExe self'.packages.myNoctalia)
-        ];
-
-        xwayland-satellite.path = lib.getExe pkgs.xwayland-satellite;
-
-        input.keyboard = {
-          xkb.layout= "us";
-        };
-
-        layout.gaps = 5;
-
-        binds = {
-          "Mod+Return".spawn-sh = lib.getExe pkgs.kitty;
-          "Mod+Q".close-window = null;
-        };
-
-      };  # settings
-
+      "config.kdl".content = builtins.readFile ./config.kdl;
     };  # packages.myNiri
 
   }; # perSystem

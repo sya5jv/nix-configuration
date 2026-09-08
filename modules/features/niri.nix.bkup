@@ -1,0 +1,62 @@
+{ self, inputs, ... }: {
+
+  flake.nixosModules.niri = { pkgs, lib, ... }: {
+    programs.niri = {
+      enable = true;
+      package = self.packages.${pkgs.stdenv.hostPlatform.system}.myNiri;
+    };
+  };
+
+  perSystem = { pkgs, lib, self', ... }: {
+
+    packages.myNiri = inputs.wrapper-modules.wrappers.niri.wrap {
+
+      inherit pkgs;
+
+      # Niri KDL settings file contents here
+      settings = {
+
+        spawn-at-startup = [
+          (lib.getExe self'.packages.myNoctalia)
+          ["ghostty" "--gtk-single-instance=true" "--quit-after-last-window-closed=false" "--initial-window=false"]
+          "mako"
+        ];
+
+        xwayland-satellite.path = lib.getExe pkgs.xwayland-satellite;
+
+        input = {
+          keyboard = {
+            xkb.layout = "us";
+            repeat-rate = 35;
+            repeat-delay = 300;
+          };
+        };
+
+        layout.gaps = 5;
+
+        binds = {
+          "Mod+Return".spawn-sh = lib.getExe pkgs.ghostty;
+        };
+
+        outputs = {
+          "DP-9" = {
+            mode = "2560x1440";
+            scale = 1.0;
+            transform = "normal";
+            variable-refresh-rate = true;
+          };
+          "DP-10" = {
+            mode = "1920x1080";
+            scale = 1.0;
+            transform = "normal";
+          };
+        };
+
+      };  # settings
+
+    };  # packages.myNiri
+
+  }; # perSystem
+
+}
+
