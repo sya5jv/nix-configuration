@@ -5,53 +5,61 @@
     imports = [
       self.nixosModules.lemontreeHardware
       self.nixosModules.niri
+      # inputs.noctalia-greeter.nixosModules.default
     ];
 
     # Enabling flakes
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-    # systemd-boot EFI boot loader
-    boot.loader.systemd-boot.enable = true;
-    boot.loader.efi.canTouchEfiVariables = true;
+    boot = {
 
-    # Use latest kernel
-    boot.kernelPackages = pkgs.linuxPackages_latest;
+      # Use latest kernel
+      kernelPackages = pkgs.linuxPackages_latest;
 
-    # Kernel modules on startup
-    boot.initrd.kernelModules = [ 
-      "dm-snapshot" # dm-snapshot for btrfs CoW snapshots
-      "cryptd"      # cryptd for LUKS encryption of disk
-    ];
+      initrd = {
+        # Kernel modules on startup
+        kernelModules = [ 
+          "dm-snapshot" # dm-snapshot for btrfs CoW snapshots
+          "cryptd"      # cryptd for LUKS encryption of disk
+        ];
 
-    # Enabling systemd at stage 1 for suspensions and hibernation on encryted disks
-    boot.initrd.systemd = {
-      enable = true;
-    };
+        # Enabling systemd at stage 1 for suspensions and hibernation on encryted disks
+        systemd = {
+          enable = true;
+        };
 
-    # Specifying which device is LUKS encrypted
-    boot.initrd.luks.devices = {
-      luksroot = {
-        device = "/dev/nvme0n1p2";
-        preLVM = true;
+        # Specifying which device is LUKS encrypted
+        luks.devices = {
+          luksroot = {
+            device = "/dev/nvme0n1p2"; # TODO: Replace with UUID
+            preLVM = true;
+          };
+        };
       };
+
+      # systemd-boot EFI boot loader
+      loader.systemd-boot.enable = true;
+      loader.efi.canTouchEfiVariables = true;
+
+      # Device hibernation
+      # resumeDevice = "/dev/dm-1";  # WIP: Need to look at TPM in order to look at automatic device unlocking
+
     };
 
-    # Device hibernation
-    # boot.resumeDevice = "/dev/dm-1";  # WIP: Need to look at TPM in order to look at automatic device unlocking
+    systemd = {
 
-    time.timeZone = "US/Eastern";
+      sleep.settings.Sleep.enable = true;
+
+      services.gnome-remote-desktop = {
+        wantedBy = [ "graphical.target" ];
+      };
+
+    };
 
     fileSystems = {
       "/".options = [ "compress=zstd" ];
       "/home".options = [ "compress=zstd" ];
       "/nix".options = [ "compress=zstd" "noatime" ];
-    };
-
-    systemd.sleep.settings.Sleep.enable = true;
-
-
-    systemd.services.gnome-remote-desktop = {
-      wantedBy = [ "graphical.target" ];
     };
 
     powerManagement = {
@@ -61,6 +69,8 @@
         echo "Resuming device."
       '';
     };
+
+    time.timeZone = "US/Eastern";
 
     services = {
 
@@ -177,7 +187,6 @@
         };
       };
 
-
       xserver = {
         xkb = {
           layout = "us,us";  # Configure keymap in X11
@@ -237,9 +246,26 @@
       # openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKsUBONtlC6T4CvTGGkRFcsHYhJiz9KZ+JqJzHOXVOqA syahn-2025-12-13" ];
     };
 
+    users.users.vmuser = {
+      isNormalUser = true;
+      initialPassword = "password01";
+      extraGroups = [
+        "wheel"
+        "networkmanager"
+        "tss"
+      ];
+    };
+
     # List packages installed in system profile.
     # You can use https://search.nixos.org/ to find more packages (and options).
     environment.systemPackages = with pkgs; [
+      eza
+      zoxide
+      vesktop
+      alacritty
+      ghostty
+      greetd
+      claude-code
       fish        # Shell
       vim         # Text editor
       tmux        # Terminal multiplexer
@@ -269,8 +295,9 @@
       hdparm
       libarchive
 
-      # inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default  # Noctalia shell input from flake.nix
-      # inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
+      inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default  # Noctalia input from flake.nix
+      # inputs.noctalia-greeter.packages.${pkgs.stdenv.hostPlatform.system}.default  # Noctalia greeter input from flake.nix
+      inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
 
     nixpkgs.config.allowUnfreePredicate = pkgs: builtins.elem (lib.getName pkgs) [
@@ -279,6 +306,7 @@
       "steam-run"
       "steam-unwrapped"
       "spotify"
+      "claude-code"
     ];
 
     fonts.packages = with pkgs; [
@@ -289,8 +317,13 @@
       enable = true;
       xdgOpenUsePortal = true;
       config = {
-        common.default = [ "gtk" ];
-        niri.default = [ "gnome" "gtk" ];
+        # common.default = [ "gtk" ];
+        # niri.default = [ "gnome" "gtk" ];
+        common.default = [ "gnome" "gtk" ];
+        niri = {
+          "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
+          "org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
+        };
       };
       configPackages = [
         pkgs.xdg-desktop-portal-gtk
@@ -333,6 +366,17 @@
 
       gamemode.enable = true;
 
+      # noctalia-greeter = {
+      #   enable = true;
+      #   settings = {
+      #     cursor = {
+      #       theme = "Bibata-Modern-Ice";
+      #       size = 24;
+      #       path = "${pkgs.bibata-cursors}/share/icons";
+      #     };
+      #   };
+      # };
+
     };
 
     networking = {
@@ -364,7 +408,12 @@
 
       polkit.enable = true;
 
-      pam.services.swaylock = {};
+      pam.services = {
+        # greetd = {
+        #   fprintAuth = true;
+        # };
+        swaylock = {};
+      };
 
     };
 

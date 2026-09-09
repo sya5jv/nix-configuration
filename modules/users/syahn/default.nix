@@ -2,9 +2,11 @@
 {
 
   imports = [
-    ../common.nix
-    ./programs
+    inputs.hjem.nixosModules.hjem # Import hjem module functionality
+    ./programs # Import programs for specific user
   ];
+
+  hjem.clobberByDefault = false;  # When true, overwrites existing files on rebuild
 
   users.users.syahn = {
     enable = lib.mkDefault false;   # Machines must manually enable the users

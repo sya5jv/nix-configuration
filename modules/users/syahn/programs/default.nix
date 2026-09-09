@@ -2,8 +2,6 @@
 {
 
   imports = [
-    ./fish.nix
-
     inputs.nix-index-database.nixosModules.nix-index
   ];
 
@@ -17,7 +15,6 @@
       tmux
       neovim
       git
-      alacritty
       ghostty
 
       # CLI Utilities
