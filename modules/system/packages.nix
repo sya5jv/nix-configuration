@@ -15,6 +15,7 @@
       claude-code
       net-tools
       iproute2
+      yazi
       fish        # Shell
       vim         # Text editor
       tmux        # Terminal multiplexer
