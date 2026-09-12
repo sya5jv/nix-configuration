@@ -5,6 +5,8 @@
   flake.nixosModules.systemPackages =
   { config, pkgs, lib, ... }:
   {
+    imports = [ inputs.noctalia-greeter.nixosModules.default ];
+
     environment.systemPackages = with pkgs; [
       eza
       zoxide
@@ -70,16 +72,16 @@
 
       gamemode.enable = true;
 
-      # noctalia-greeter = {
-      #   enable = true;
-      #   settings = {
-      #     cursor = {
-      #       theme = "Bibata-Modern-Ice";
-      #       size = 24;
-      #       path = "${pkgs.bibata-cursors}/share/icons";
-      #     };
-      #   };
-      # };
+      noctalia-greeter = {
+        enable = true;
+        settings = {
+          cursor = {
+            theme = "Bibata-Modern-Ice";
+            size = 24;
+            path = "${pkgs.bibata-cursors}/share/icons";
+          };
+        };
+      };
 
     };
   };

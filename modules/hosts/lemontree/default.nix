@@ -6,6 +6,7 @@
       self.nixosModules.lemontreeConfiguration
       self.nixosModules.lemontreeHardware
       self.nixosModules.lemontreeVm
+      self.nixosModules.lemontreeLuks
       self.nixosModules.userSyahn
 
       # Desktop Modules
