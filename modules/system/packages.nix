@@ -13,6 +13,8 @@
       ghostty
       greetd
       claude-code
+      net-tools
+      iproute2
       fish        # Shell
       vim         # Text editor
       tmux        # Terminal multiplexer

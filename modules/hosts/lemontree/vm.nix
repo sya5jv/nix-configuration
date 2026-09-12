@@ -18,6 +18,7 @@
           memorySize = 4096;
           cores = 4;
           graphics = true;
+          useEFIBoot = true;
           qemu.options = [
             "-vga virtio"
             "-display gtk,zoom-to-fit=on"

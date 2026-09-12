@@ -18,7 +18,7 @@
         "tss"
         "libvirtd"
       ];
-      # shell = pkgs.fish;
+      shell = pkgs.fish;
     };
 
     i18n = {
