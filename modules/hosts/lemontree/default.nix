@@ -2,23 +2,31 @@
 
   flake.nixosConfigurations.lemontree = inputs.nixpkgs.lib.nixosSystem {
     modules = [
-      # self.nixosModules.lemontreeConfiguration
+      # Host-Specific Modules
+      self.nixosModules.lemontreeConfiguration
       self.nixosModules.lemontreeHardware
       self.nixosModules.lemontreeVm
-      self.nixosModules.firmware
+      self.nixosModules.userSyahn
+
+      # Desktop Modules
+      self.nixosModules.fonts
+      self.nixosModules.niri
+      self.nixosModules.noctalia
+      self.nixosModules.xdgPortals
+
+      # Hardware Modules
+      self.nixosModules.bluetooth
       self.nixosModules.amdApu
+
+      # System Modules
       self.nixosModules.boot
       self.nixosModules.networking
-      self.nixosModules.userSyahn
-      self.nixosModules.openssh
+      self.nixosModules.systemPackages
 
-    {
-      networking.hostName = "lemontree";
-      system.stateVersion = "25.11";
-    }
+      # Services Modules
+      self.nixosModules.openssh
+      self.nixosModules.pipewire
 
     ];
-
   };
-
 }

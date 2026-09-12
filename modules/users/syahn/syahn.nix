@@ -16,6 +16,7 @@
         "rtkit"
         "networkmanager"
         "tss"
+        "libvirtd"
       ];
       # shell = pkgs.fish;
     };

@@ -6,7 +6,7 @@
     { config, lib, pkgs, ... }:
     {
       hardware.graphics.enable = true;
-      hardware.graphics.enable32bit = true;
+      hardware.graphics.enable32Bit = true;
 
       # Option to disable Panel Self Refresh, a power-saving negotiation feature known to occasionally cause flickering
       # due to issues with the PSR driver

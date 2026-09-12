@@ -1,48 +1,11 @@
-{ self, inputs, ... }: {
+{ self, inputs, lib, ... }: {
 
-  flake.nixosModules.lemontreeConfiguration = { pkgs, lib, ... }: {
-
-    imports = [
-      self.nixosModules.lemontreeHardware
-    ];
+  flake.nixosModules.lemontreeConfiguration =
+  { pkgs, lib, ... }:
+  {
 
     # Enabling flakes
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
-    boot = {
-
-      # Use latest kernel
-      kernelPackages = pkgs.linuxPackages_latest;
-
-      initrd = {
-        # Kernel modules on startup
-        kernelModules = [ 
-          "dm-snapshot" # dm-snapshot for btrfs CoW snapshots
-          "cryptd"      # cryptd for LUKS encryption of disk
-        ];
-
-        # Enabling systemd at stage 1 for suspensions and hibernation on encryted disks
-        systemd = {
-          enable = true;
-        };
-
-        # Specifying which device is LUKS encrypted
-        luks.devices = {
-          luksroot = {
-            device = "/dev/nvme0n1p2"; # TODO: Replace with UUID
-            preLVM = true;
-          };
-        };
-      };
-
-      # systemd-boot EFI boot loader
-      loader.systemd-boot.enable = true;
-      loader.efi.canTouchEfiVariables = true;
-
-      # Device hibernation
-      # resumeDevice = "/dev/dm-1";  # WIP: Need to look at TPM in order to look at automatic device unlocking
-
-    };
 
     systemd = {
 
@@ -198,200 +161,14 @@
         gnome-keyring.enable = true;
       };
 
-      displayManager = {
-        ly = {
-          enable = true;
-          settings = {
-            battery_id = "BAT0";
-            brightness_up_cmd = "brightnessctl -q -n s 5%+";
-            brightness_down_cmd = "brightnessctl -q -n s 5%-";
-            clear_password = true;
-            clock = "%c";
-            default_input = "password";
-            save = true;
-            vi_mode = true;
-            vi_default_mode = "insert";
-          };
-        };
-        autoLogin.enable = false;
-      };
-
       getty.autologinUser = null;
-
-      # Enable sound.
-      pipewire = {
-        enable = true;
-        pulse.enable = true;
-      };
 
       # Enable touchpad support (enabled default in most desktopManager).
       libinput.enable = true;
 
     };
 
-    # Define a user account. Don't forget to set a password with ‘passwd’.
-    users.users.syahn = {
-      isNormalUser = true;
-      home = "/home/syahn";
-      uid = 1000;
-      group = "users";
-      extraGroups = [
-        "wheel"
-        "networkmanager"
-        "tss"
-      ];
-      shell = pkgs.fish;
-      # openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKsUBONtlC6T4CvTGGkRFcsHYhJiz9KZ+JqJzHOXVOqA syahn-2025-12-13" ];
-    };
-
-    users.users.vmuser = {
-      isNormalUser = true;
-      initialPassword = "password01";
-      extraGroups = [
-        "wheel"
-        "networkmanager"
-        "tss"
-      ];
-    };
-
-    # List packages installed in system profile.
-    # You can use https://search.nixos.org/ to find more packages (and options).
-    environment.systemPackages = with pkgs; [
-      eza
-      zoxide
-      vesktop
-      alacritty
-      ghostty
-      greetd
-      claude-code
-      fish        # Shell
-      vim         # Text editor
-      tmux        # Terminal multiplexer
-      git         # Version control
-      wget        # CLI utility
-      tree        # CLI utility
-      which       # CLI utility
-      sbctl       # Secure boot manager
-      tpm2-tss    # TPM2 manager
-      tpm2-tools  # TPM2 Utilities
-      ly          # TUI Display Manager
-      brightnessctl   # Screen brightness utility used by ly
-      ffmpeg-full # Media functionality
-
-      # Desktop Envionment Packages
-
-      niri        # Wayland Compositor
-      mako        # Desktop Notification Service
-      swaybg      # Background Software
-      swayidle    # Desktop Idle Status
-      swaylock    # Desktop Lock Screen
-      xdg-desktop-portal-gtk    # XDG Desktop Portal for Screen Sharing
-      xdg-desktop-portal-gnome  # XDG Desktop Portal for Screen Sharing 
-      xwayland-satellite        # Wayland support for X11 Programs
-      udiskie     # Manage and Auto-mount USB Drives
-      parted
-      hdparm
-      libarchive
-
-      inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default  # Noctalia input from flake.nix
-      # inputs.noctalia-greeter.packages.${pkgs.stdenv.hostPlatform.system}.default  # Noctalia greeter input from flake.nix
-      inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
-    ];
-
-    nixpkgs.config.allowUnfreePredicate = pkgs: builtins.elem (lib.getName pkgs) [
-      "steam"
-      "steam-original"
-      "steam-run"
-      "steam-unwrapped"
-      "spotify"
-      "claude-code"
-    ];
-
-    fonts.packages = with pkgs; [
-      nerd-fonts.jetbrains-mono
-    ];
-
-    xdg.portal = {
-      enable = true;
-      xdgOpenUsePortal = true;
-      config = {
-        # common.default = [ "gtk" ];
-        # niri.default = [ "gnome" "gtk" ];
-        common.default = [ "gnome" "gtk" ];
-        niri = {
-          "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
-          "org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
-        };
-      };
-      configPackages = [
-        pkgs.xdg-desktop-portal-gtk
-        pkgs.xdg-desktop-portal-gnome
-      ];
-      extraPortals = [
-        pkgs.xdg-desktop-portal-gtk
-        pkgs.xdg-desktop-portal-gnome
-      ];
-    };
-
-    programs = {
-
-      # ssh-agent
-      ssh = {
-        startAgent = false;
-        extraConfig = ''
-          Host github.com
-            IdentityFile ~/.ssh/id_ed25519_20251214
-        '';
-      };
-
-      # fish shell
-      fish.enable = true;
-
-      # Neovim editor
-      neovim = {
-        enable = true;
-        defaultEditor = true;
-      };
-
-      # Wayland Compositor
-      niri.enable = true;
-
-      steam = {
-        enable = true;
-        remotePlay.openFirewall = true;
-        dedicatedServer.openFirewall = true;
-      };
-
-      gamemode.enable = true;
-
-      # noctalia-greeter = {
-      #   enable = true;
-      #   settings = {
-      #     cursor = {
-      #       theme = "Bibata-Modern-Ice";
-      #       size = 24;
-      #       path = "${pkgs.bibata-cursors}/share/icons";
-      #     };
-      #   };
-      # };
-
-    };
-
-    networking = {
-      hostName = "lemontree";
-
-      networkmanager = {
-        enable = true;
-      };
-
-      firewall = {
-        enable = true;
-        allowedTCPPorts = [ 22 3389 ];
-        # allowedUDPPorts = [ ... ];
-      };
-    };
-
-    hardware.bluetooth.enable = true;
+    networking.hostName = "lemontree";
 
     security = {
       tpm2 = {
@@ -415,6 +192,6 @@
 
     };
 
-    system.stateVersion = "25.11"; # Did you read the comment?
+    system.stateVersion = "25.11";
   };
 }
