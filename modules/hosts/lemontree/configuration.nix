@@ -4,8 +4,6 @@
 
     imports = [
       self.nixosModules.lemontreeHardware
-      self.nixosModules.niri
-      # inputs.noctalia-greeter.nixosModules.default
     ];
 
     # Enabling flakes

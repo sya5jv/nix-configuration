@@ -2,7 +2,7 @@
 
 { inputs, lib, ... }:
 {
-  flake.nixosModules.lemontree-vm =
+  flake.nixosModules.lemontreeVm =
   { config, lib, pkgs, ... }:
   {
     virtualisation.vmVariant = {

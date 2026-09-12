@@ -2,7 +2,7 @@
 
 { inputs, lib, ... }:
 {
-  flake.nixosModules.amd-cpu =
+  flake.nixosModules.amdCpu =
   { config, lib, pkgs, ... }:
   {
     hardware.cpu.amd.updateMicrocode = lib.mkDefault true;

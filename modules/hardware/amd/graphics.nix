@@ -2,7 +2,7 @@
 
 { inputs, lib, ... }:
 {
-  flake.nixosModules.amd-graphics =
+  flake.nixosModules.amdGraphics =
     { config, lib, pkgs, ... }:
     {
       hardware.graphics.enable = true;

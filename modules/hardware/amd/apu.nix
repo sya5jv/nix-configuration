@@ -3,12 +3,12 @@
 
 { self, inputs, lib, ... }:
 {
-  flake.nixosModules.amd-apu =
+  flake.nixosModules.amdApu =
     { config, lib, pkgs, ... }:
     {
       imports = [
-        self.nixosModules.amd-cpu
-        self.nixosModules.amd-graphics
+        self.nixosModules.amdCpu
+        self.nixosModules.amdGraphics
       ];
     };
 }
