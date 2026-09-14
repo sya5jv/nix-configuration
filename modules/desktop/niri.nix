@@ -15,7 +15,6 @@
 
     environment.systemPackages = with pkgs; [
       niri
-      mako
       xdg-desktop-portal-gtk
       xdg-desktop-portal-gnome
       xwayland-satellite

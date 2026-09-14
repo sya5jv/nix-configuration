@@ -7,7 +7,7 @@
   {
     imports = [ inputs.noctalia-greeter.nixosModules.default ];
 
-    environment.systemPackages = with pkgs; [
+    environment.systemPackages = (with pkgs; [
       eza
       zoxide
       vesktop
@@ -18,6 +18,15 @@
       net-tools
       iproute2
       yazi
+      bat
+      feh
+      fzf
+      btop
+      iftop
+      bind
+      dig
+      traceroute
+      nmap
       fish        # Shell
       vim         # Text editor
       tmux        # Terminal multiplexer
@@ -33,7 +42,11 @@
       hdparm
       libarchive
       inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
-    ];
+    ]) ++ (with pkgs.nixos-artwork.wallpapers; [
+      binary-black
+      simple-dark-gray-bottom
+    ]);
+    environment.pathsToLink = [ "/share/background/nixos" ];
 
     nixpkgs.config.allowUnfreePredicate = pkgs: builtins.elem (lib.getName pkgs) [
       "steam"

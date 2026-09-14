@@ -9,7 +9,11 @@
         kernelPackages = pkgs.linuxPackages_latest;
         loader = {
           # systemd-boot.enable = true; # Turned off 
-          limine.enable = true;
+          limine = {
+            enable = true;
+            efiSupport = true;
+            style.wallpapers = [ pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath ];
+          };
           efi.canTouchEfiVariables = true;
         };
         # Device hibernation
