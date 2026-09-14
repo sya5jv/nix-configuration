@@ -5,6 +5,6 @@
   flake.nixosModules.amdCpu =
   { config, lib, pkgs, ... }:
   {
-    hardware.cpu.amd.updateMicrocode = lib.mkDefault true;
+    hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   };
 }

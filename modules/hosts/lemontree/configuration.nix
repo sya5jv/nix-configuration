@@ -1,3 +1,7 @@
+# modules/hosts/lemontree/configuration.nix
+
+# TODO: Split this out into more modules.
+
 { self, inputs, lib, ... }: {
 
   flake.nixosModules.lemontreeConfiguration =

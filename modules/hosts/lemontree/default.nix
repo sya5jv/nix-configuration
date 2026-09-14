@@ -1,3 +1,7 @@
+# modules/hosts/lemontree/default.nix
+
+# Main "entrypoint" for the host.
+
 { self, inputs, ... }: {
 
   flake.nixosConfigurations.lemontree = inputs.nixpkgs.lib.nixosSystem {

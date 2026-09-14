@@ -1,3 +1,7 @@
+# modules/desktop/niri.nix
+
+# TODO: Still have to decide on hjem management vs wrapper-modules system package
+
 { self, inputs, lib, ... }: {
 
   flake.nixosModules.niri =

@@ -1,3 +1,5 @@
+# modules/parts.nix
+
 { inputs, ... }: {
 
   config = {

@@ -1,4 +1,6 @@
-# modules/desktop/portals.nix
+# modules/desktop/xdg-portals.nix
+
+# Explicitly required for niri RDP
 
 { inputs, lib, ... }:
 {

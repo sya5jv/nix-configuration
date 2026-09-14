@@ -1,3 +1,7 @@
+# modules/hosts/lemontree/luks.nix
+
+# TODO: See line 25.
+
 { inputs, lib, ... }:
 {
   flake.nixosModules.lemontreeLuks =

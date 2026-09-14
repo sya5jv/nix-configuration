@@ -1,4 +1,4 @@
-# modules/desktop/nocatalia.nix
+# modules/desktop/noctalia.nix
 
 { inputs, lib, ... }:
 {

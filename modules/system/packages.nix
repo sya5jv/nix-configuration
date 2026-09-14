@@ -55,6 +55,7 @@
       "steam-unwrapped"
       "spotify"
       "claude-code"
+      "vscode"
     ];
 
     programs = {
@@ -82,6 +83,9 @@
         remotePlay.openFirewall = true;
         dedicatedServer.openFirewall = true;
       };
+
+      vscode.enable = true;
+      nix-ld.enable = true;
 
       gamemode.enable = true;
 
