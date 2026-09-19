@@ -20,6 +20,7 @@
       self.nixosModules.xdgPortals
 
       # Hardware Modules
+      self.nixosModules.commonHardwareConfig
       self.nixosModules.bluetooth
       self.nixosModules.amdApu
 

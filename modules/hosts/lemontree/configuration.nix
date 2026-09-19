@@ -13,7 +13,12 @@
 
     systemd = {
 
-      sleep.settings.Sleep.enable = true;
+      sleep.settings.Sleep = {
+        AllowSuspend = "yes";
+        AllowHibernation = "no";
+        AllowHybridSleep = "no";
+        AllowSuspendThenHibernate = "no";
+      };
 
       services.gnome-remote-desktop = {
         wantedBy = [ "graphical.target" ];
@@ -35,7 +40,7 @@
       '';
     };
 
-    time.timeZone = "US/Eastern";
+    time.timeZone = "America/New_York";
 
     services = {
 
@@ -66,9 +71,9 @@
           RADEON_DPM_PERF_LEVEL_ON_BAT="auto";
           RADEON_DPM_STATE_ON_AC="performance";
           RADEON_DPM_STATE_ON_BAT="balanced";
-          ADMGPU_ABM_LEVEL_ON_AC=0;
-          ADMGPU_ABM_LEVEL_ON_BAT=1;
-          ADMGPU_ABM_LEVEL_ON_SAV=3;
+          AMDGPU_ABM_LEVEL_ON_AC=0;
+          AMDGPU_ABM_LEVEL_ON_BAT=1;
+          AMDGPU_ABM_LEVEL_ON_SAV=3;
 
           # Platform settings
           # (OS characteristics around power/performance levels, thermal, and fan speed)
@@ -191,7 +196,6 @@
         # greetd = {
         #   fprintAuth = true;
         # };
-        swaylock = {};
       };
 
     };
