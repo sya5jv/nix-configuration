@@ -8,6 +8,10 @@
     imports = [ inputs.noctalia-greeter.nixosModules.default ];
 
     environment.systemPackages = (with pkgs; [
+      lua-language-server
+      nixd
+      nixfmt
+      alejandra
       eza
       zoxide
       vesktop
