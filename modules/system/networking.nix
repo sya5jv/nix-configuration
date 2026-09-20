@@ -10,11 +10,13 @@
       ...
     }:
     {
-      # NetworkManager
-      networking.networkmanager.enable = true;
+      networking = {
+        # NetworkManager
+        networkmanager.enable = true;
 
-      # Firewall
-      networking.firewall.enable = true;
-      networking.nftables.enable = true; # Opt for nftables-based firewall instead of iptables
+        # Firewall
+        firewall.enable = true;
+        nftables.enable = true; # Opt for nftables-based firewall instead of iptables
+      };
     };
 }

@@ -16,42 +16,49 @@
         (modulesPath + "/installer/scan/not-detected.nix")
       ];
 
-      boot.initrd.availableKernelModules = [
-        "nvme"
-        "xhci_pci"
-        "thunderbolt"
-        "usb_storage"
-        "sd_mod"
-      ];
-      boot.initrd.kernelModules = [ "dm-snapshot" ];
-      boot.kernelModules = [ "kvm-amd" ];
-      boot.extraModulePackages = [ ];
+      boot = {
+        initrd = {
+          availableKernelModules = [
+            "nvme"
+            "xhci_pci"
+            "thunderbolt"
+            "usb_storage"
+            "sd_mod"
+          ];
+          kernelModules = [ "dm-snapshot" ];
+        };
 
-      fileSystems."/" = {
-        device = "/dev/mapper/nixos--vg-root";
-        fsType = "btrfs";
-        options = [ "subvol=root" ];
+        kernelModules = [ "kvm-amd" ];
+        extraModulePackages = [ ];
       };
 
-      fileSystems."/nix" = {
-        device = "/dev/mapper/nixos--vg-root";
-        fsType = "btrfs";
-        options = [ "subvol=nix" ];
-      };
+      fileSystems = {
+        "/" = {
+          device = "/dev/mapper/nixos--vg-root";
+          fsType = "btrfs";
+          options = [ "subvol=root" ];
+        };
 
-      fileSystems."/home" = {
-        device = "/dev/mapper/nixos--vg-root";
-        fsType = "btrfs";
-        options = [ "subvol=home" ];
-      };
+        "/nix" = {
+          device = "/dev/mapper/nixos--vg-root";
+          fsType = "btrfs";
+          options = [ "subvol=nix" ];
+        };
 
-      fileSystems."/boot" = {
-        device = "/dev/disk/by-uuid/61A4-99A1";
-        fsType = "vfat";
-        options = [
-          "fmask=0077"
-          "dmask=0077"
-        ];
+        "/home" = {
+          device = "/dev/mapper/nixos--vg-root";
+          fsType = "btrfs";
+          options = [ "subvol=home" ];
+        };
+
+        "/boot" = {
+          device = "/dev/disk/by-uuid/61A4-99A1";
+          fsType = "vfat";
+          options = [
+            "fmask=0077"
+            "dmask=0077"
+          ];
+        };
       };
 
       swapDevices = [
