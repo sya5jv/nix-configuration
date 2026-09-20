@@ -3,7 +3,12 @@
 { inputs, lib, ... }:
 {
   flake.nixosModules.openssh =
-    { config, lib, pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     {
       services.openssh = {
         enable = true;

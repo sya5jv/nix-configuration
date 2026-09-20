@@ -3,7 +3,12 @@
 { inputs, lib, ... }:
 {
   flake.nixosModules.amdGraphics =
-    { config, lib, pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     {
       hardware.graphics.enable = true;
       hardware.graphics.enable32Bit = true;

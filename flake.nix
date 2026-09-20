@@ -39,6 +39,5 @@
   };
 
   # Using import-tree to import all modules into flake-parts
-  outputs = inputs: inputs.flake-parts.lib.mkFlake {inherit inputs;}
-    (inputs.import-tree ./modules);
+  outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
 }

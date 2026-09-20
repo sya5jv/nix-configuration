@@ -6,8 +6,13 @@
 { inputs, lib, ... }:
 {
   flake.nixosModules.commonHardwareConfig =
-  { config, pkgs, lib, ... }:
-  {
-    hardware.enableRedistributableFirmware = lib.mkDefault true;
-  };
+    {
+      config,
+      pkgs,
+      lib,
+      ...
+    }:
+    {
+      hardware.enableRedistributableFirmware = lib.mkDefault true;
+    };
 }

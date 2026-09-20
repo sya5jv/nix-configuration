@@ -3,8 +3,14 @@
 
 { inputs, lib, ... }:
 {
-  flake.lib.mkUser = username:
-    { config, lib, pkgs, ... }:
+  flake.lib.mkUser =
+    username:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     {
       imports = [ inputs.hjem.nixosModules.hjem ];
 

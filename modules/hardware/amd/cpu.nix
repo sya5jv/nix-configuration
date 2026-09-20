@@ -3,8 +3,13 @@
 { inputs, lib, ... }:
 {
   flake.nixosModules.amdCpu =
-  { config, lib, pkgs, ... }:
-  {
-    hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-  };
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
+    {
+      hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+    };
 }
