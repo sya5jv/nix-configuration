@@ -1,6 +1,9 @@
 # modules/services/pipewire.nix
-
-{ inputs, lib, ... }:
+{
+  inputs,
+  lib,
+  ...
+}:
 {
   flake.nixosModules.pipewire =
     {

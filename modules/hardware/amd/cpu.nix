@@ -1,6 +1,9 @@
 # modules/hardware/amd/cpu.nix
-
-{ inputs, lib, ... }:
+{
+  inputs,
+  lib,
+  ...
+}:
 {
   flake.nixosModules.amdCpu =
     {

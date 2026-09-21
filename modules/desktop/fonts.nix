@@ -1,6 +1,9 @@
 # modules/desktop/fonts.nix
-
-{ inputs, lib, ... }:
+{
+  inputs,
+  lib,
+  ...
+}:
 {
   flake.nixosModules.fonts =
     {

@@ -1,6 +1,9 @@
 # modules/hardware/bluetooth.nix
-
-{ inputs, lib, ... }:
+{
+  inputs,
+  lib,
+  ...
+}:
 {
   flake.nixosModules.bluetooth =
     {

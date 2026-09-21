@@ -1,6 +1,9 @@
 # modules/hardware/amd/graphics.nix
-
-{ inputs, lib, ... }:
+{
+  inputs,
+  lib,
+  ...
+}:
 {
   flake.nixosModules.amdGraphics =
     {

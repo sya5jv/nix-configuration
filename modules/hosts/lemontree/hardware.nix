@@ -1,7 +1,10 @@
 # modules/hosts/lemontree/hardware.nix
-
-{ self, inputs, ... }: {
-
+{
+  self,
+  inputs,
+  ...
+}:
+{
   flake.nixosModules.lemontreeHardware =
     {
       config,
@@ -11,7 +14,6 @@
       ...
     }:
     {
-
       imports = [
         (modulesPath + "/installer/scan/not-detected.nix")
       ];
@@ -67,7 +69,5 @@
 
       nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
       hardware.enableRedistributableFirmware = true;
-
     };
-
 }

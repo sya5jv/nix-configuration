@@ -1,6 +1,9 @@
 # modules/hosts/lemontree/vm.nix
-
-{ inputs, lib, ... }:
+{
+  inputs,
+  lib,
+  ...
+}:
 {
   flake.nixosModules.lemontreeVm =
     {

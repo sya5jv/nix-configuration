@@ -1,8 +1,6 @@
 # flake.nix
-
 {
   inputs = {
-
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # flake-parts module organization
@@ -36,7 +34,6 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
   };
 
   # Using import-tree to import all modules into flake-parts

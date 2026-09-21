@@ -1,6 +1,9 @@
 # modules/system/boot.nix
-
-{ inputs, lib, ... }:
+{
+  inputs,
+  lib,
+  ...
+}:
 {
   flake.nixosModules.boot =
     {

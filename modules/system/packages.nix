@@ -1,5 +1,4 @@
 # modules/system/packages.nix
-
 {
   self,
   inputs,
@@ -117,7 +116,6 @@
             };
           };
         };
-
       };
     };
 }

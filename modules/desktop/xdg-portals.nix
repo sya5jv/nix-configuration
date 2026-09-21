@@ -1,8 +1,10 @@
 # modules/desktop/xdg-portals.nix
-
 # Explicitly required for niri RDP
-
-{ inputs, lib, ... }:
+{
+  inputs,
+  lib,
+  ...
+}:
 {
   flake.nixosModules.xdgPortals =
     {

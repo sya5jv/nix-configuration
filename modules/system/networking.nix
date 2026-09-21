@@ -1,6 +1,9 @@
 # modules/system/networking.nix
-
-{ inputs, lib, ... }:
+{
+  inputs,
+  lib,
+  ...
+}:
 {
   flake.nixosModules.networking =
     {
@@ -17,6 +20,13 @@
         # Firewall
         firewall.enable = true;
         nftables.enable = true; # Opt for nftables-based firewall instead of iptables
+      };
+
+      # Set 'fail2ban' banactions to use 'nftables'
+      # See the rest of the config in 'modules/services/fail2ban.nix'
+      services.fail2ban = {
+        banaction = "nftables";
+        banaction-allports = "nftables[type=allports]";
       };
     };
 }

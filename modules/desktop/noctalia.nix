@@ -1,6 +1,9 @@
 # modules/desktop/noctalia.nix
-
-{ inputs, lib, ... }:
+{
+  inputs,
+  lib,
+  ...
+}:
 {
   flake.nixosModules.noctalia =
     {

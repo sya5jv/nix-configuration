@@ -1,7 +1,5 @@
 # modules/desktop/niri.nix
-
 # TODO: Still have to decide on hjem management vs wrapper-modules system package
-
 {
   self,
   inputs,
@@ -9,7 +7,6 @@
   ...
 }:
 {
-
   flake.nixosModules.niri =
     {
       config,
@@ -45,13 +42,10 @@
     }:
     {
       packages.myNiri = inputs.wrapper-modules.wrappers.niri.wrap {
-
         inherit pkgs;
 
         # Niri KDL settings file contents here
         "config.kdl".content = builtins.readFile ./config.kdl;
       }; # packages.myNiri
-
     }; # perSystem
-
 }

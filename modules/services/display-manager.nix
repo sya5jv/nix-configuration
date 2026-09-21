@@ -1,6 +1,9 @@
 # modules/services/display-manager.nix
-
-{ inputs, lib, ... }:
+{
+  inputs,
+  lib,
+  ...
+}:
 {
   flake.nixosModules.displayManager =
     {

@@ -1,20 +1,20 @@
 # modules/dev/devshell.nix
-
-{ inputs, lib, ... }:
+{
+  inputs,
+  ...
+}:
 {
   imports = [ inputs.devshell.flakeModule ];
 
   perSystem =
     {
-      config,
-      lib,
       pkgs,
       ...
     }:
     {
       devshells.default = {
         devshell = {
-          name = "$(echo $USER)@nix-devshell $(basename '$PWD') ($(git branch --show-current 2>/dev/null))";
+          name = "$(echo $USER)@nix-devshell";
 
           motd = ''
             {202}Nix Devshell{reset}
@@ -30,6 +30,7 @@
           # Nix language tooling (also used by VS Code, see .vscode/settings.json)
           nixd # Language server
           nixfmt # Formatter (official Nix style, RFC 166)
+          nixfmt-tree # Provides instance of treefmt to use nixfmt
           statix # Linter: anti-patterns and style suggestions
           deadnix # Linter: unused bindings and arguments
 

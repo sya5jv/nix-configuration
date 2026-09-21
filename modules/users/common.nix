@@ -1,7 +1,10 @@
 # modules/users/common.nix
 # This module serves as a way to define common settings across all users to stay DRY.
-
-{ inputs, lib, ... }:
+{
+  inputs,
+  lib,
+  ...
+}:
 {
   flake.lib.mkUser =
     username:

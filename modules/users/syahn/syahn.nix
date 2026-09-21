@@ -1,5 +1,4 @@
 # modules/users/syahn/syahn.nix
-
 {
   self,
   inputs,
@@ -36,7 +35,6 @@
       };
 
       programs = {
-
         git = {
           enable = true;
           config.user = {
@@ -95,7 +93,6 @@
         };
 
         yazi.enable = true;
-
       };
     };
 }

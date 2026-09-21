@@ -1,17 +1,16 @@
 # modules/services/openssh.nix
-
-{ inputs, lib, ... }:
+{
+  inputs,
+  lib,
+  ...
+}:
 {
   flake.nixosModules.openssh =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
-    }:
+    { lib, ... }:
     {
       services.openssh = {
         enable = true;
+        ports = lib.mkDefault [ 22 ];
         settings = {
           PasswordAuthentication = true;
           PermitRootLogin = "no";

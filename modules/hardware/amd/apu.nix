@@ -1,6 +1,5 @@
 # modules/hardware/amd/apu.nix
 # Module for AMD's Accelerated Processing Units
-
 {
   self,
   inputs,

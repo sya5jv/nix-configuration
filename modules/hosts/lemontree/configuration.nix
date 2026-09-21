@@ -1,7 +1,5 @@
 # modules/hosts/lemontree/configuration.nix
-
 # TODO: Split this out into more modules.
-
 {
   self,
   inputs,
@@ -9,11 +7,13 @@
   ...
 }:
 {
-
   flake.nixosModules.lemontreeConfiguration =
-    { pkgs, lib, ... }:
     {
-
+      pkgs,
+      lib,
+      ...
+    }:
+    {
       # Enabling flakes
       nix.settings.experimental-features = [
         "nix-command"
@@ -21,18 +21,12 @@
       ];
 
       systemd = {
-
         sleep.settings.Sleep = {
           AllowSuspend = "yes";
           AllowHibernation = "no";
           AllowHybridSleep = "no";
           AllowSuspendThenHibernate = "no";
         };
-
-        services.gnome-remote-desktop = {
-          wantedBy = [ "graphical.target" ];
-        };
-
       };
 
       fileSystems = {
@@ -55,10 +49,7 @@
       time.timeZone = "America/New_York";
 
       services = {
-
         fprintd.enable = false;
-
-        fwupd.enable = true;
 
         tlp = {
           enable = true;
@@ -109,13 +100,6 @@
           criticalPowerAction = "PowerOff";
         };
 
-        # Laptop lid power settings
-        logind.settings.Login = {
-          HandleLidSwitch = "suspend";
-          HandleLidSwitchExternalPower = "suspend";
-          HandleLidSwitchDocked = "ignore";
-        };
-
         # BTRFS automatic data integrity checking
         btrfs.autoScrub = {
           enable = false;
@@ -123,51 +107,8 @@
           fileSystems = [ "/" ];
         };
 
-        # Enable the OpenSSH daemon.
-        openssh = {
-          enable = true;
-          ports = [ 22 ];
-          settings = {
-            PasswordAuthentication = true; # should be false
-            KbdInteractiveAuthentication = false; # should be false
-            PermitRootLogin = "no";
-            AllowUsers = [ "syahn" ];
-          };
-        };
-
-        fail2ban = {
-          enable = true;
-          # Ban IP after 5 failures
-          maxretry = 5;
-          ignoreIP = [
-            "127.0.0.0/8" # Default made explicit
-            "::1" # Default made explicit
-            "192.168.0.0/16"
-          ];
-          bantime = "24h";
-          bantime-increment = {
-            enable = true; # Enable increment of bantime after each violation
-            # formula = "ban.Time * math.exp(float(ban.Count+1)*banFactor)/math.exp(1*banFactor)";
-            multipliers = "1 2 4 8 16 32 64";
-            maxtime = "168h"; # One week
-            overalljails = true; # Calculate the bantime based on all the violations
-          };
-          jails = {
-            sshd.settings = {
-              # Block an IP address if it accesses a non-extistent
-              # home directory more than 5 times in 10 minutes
-              # since that indicates that it's scanning
-              enabled = "false";
-              port = "ssh";
-              filter = "sshd";
-              logpath = "/var/log/auth.log";
-              maxretry = 5;
-              findtime = 300;
-              bantime = 3600;
-              ignoreip = "127.0.0.1";
-            };
-          };
-        };
+        # Allow users to SSH onto machine
+        openssh.settings.AllowUsers = [ "syahn" ];
 
         xserver = {
           xkb = {
@@ -177,40 +118,10 @@
           };
         };
 
-        gnome = {
-          gnome-remote-desktop.enable = true;
-          gnome-keyring.enable = true;
-        };
-
         getty.autologinUser = null;
-
-        # Enable touchpad support (enabled default in most desktopManager).
-        libinput.enable = true;
-
       };
 
       networking.hostName = "lemontree";
-
-      security = {
-        tpm2 = {
-          enable = true;
-
-          abrmd.enable = true;
-          pkcs11.enable = true;
-
-          tctiEnvironment.enable = true;
-          tctiEnvironment.interface = "tabrmd";
-        };
-
-        polkit.enable = true;
-
-        pam.services = {
-          # greetd = {
-          #   fprintAuth = true;
-          # };
-        };
-
-      };
 
       system.stateVersion = "25.11";
     };
