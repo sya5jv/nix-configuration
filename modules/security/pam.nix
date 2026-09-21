@@ -6,7 +6,7 @@
     {
       security.pam.services = {
         # Disabled for now. Firguring out greetd...
-        greetd.enable = false;
+        greetd.enable = true;
       };
     };
 }

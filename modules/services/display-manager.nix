@@ -14,20 +14,32 @@
     }:
     {
       services.displayManager = {
-        ly = {
-          enable = false;
+        # ly = {
+        #   enable = false;
+        #   settings = {
+        #     battery_id = "BAT0";
+        #     brightness_up_cmd = "brightnessctl -q -n s 5%+";
+        #     brightness_down_cmd = "brightnessctl -q -n s 5%-";
+        #     clear_password = true;
+        #     clock = "%c";
+        #     default_input = "password";
+        #     save = true;
+        #     vi_mode = true;
+        #     vi_default_mode = "insert";
+        #   };
+        # };
+
+        noctalia-greeter = {
+          enable = true;
           settings = {
-            battery_id = "BAT0";
-            brightness_up_cmd = "brightnessctl -q -n s 5%+";
-            brightness_down_cmd = "brightnessctl -q -n s 5%-";
-            clear_password = true;
-            clock = "%c";
-            default_input = "password";
-            save = true;
-            vi_mode = true;
-            vi_default_mode = "insert";
+            cursor = {
+              theme = "Bibata-Modern-Ice";
+              size = 24;
+              path = "${pkgs.bibata-cursors}/share/icons";
+            };
           };
         };
+
         autoLogin.enable = false;
       };
     };
