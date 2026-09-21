@@ -1,62 +1,41 @@
+# flake.nix
 {
-  description = "NixOS configuration";
-
   inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    nixpkgs.url = "nixpkgs/nixos-unstable";
+    # flake-parts module organization
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    devshell.url = "github:numtide/devshell";
+    import-tree.url = "github:vic/import-tree";
 
-    home-manager = {
-      url = "github:nix-community/home-manager";
+    wrapper-modules.url = "github:BirdeeHub/nix-wrapper-modules";
+
+    hjem = {
+      url = "github:feel-co/hjem";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     noctalia = {
-      url = "github:noctalia-dev/noctalia-shell";
+      url = "github:noctalia-dev/noctalia";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    noctalia-greeter = {
+      url = "github:noctalia-dev/noctalia-greeter";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     zen-browser = {
-      url = "github:0xc000022070/zen-browser-flake";
+      url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
   };
 
-  outputs = inputs@{ 
-    self,
-    nixpkgs,
-    home-manager,
-    nixos-hardware,
-    # ghostty,
-    ...
-  }: {
-
-    nixosConfigurations.lemontree = nixpkgs.lib.nixosSystem {
-
-      system = "x86_64-linux";
-
-      specialArgs = { inherit inputs; };
-
-      modules = [
-
-        ./configuration.nix
-
-        home-manager.nixosModules.home-manager
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            users.syahn = import ./home.nix;
-            backupFileExtension = "backup";
-          };
-        }
-
-        nixos-hardware.nixosModules.lenovo-thinkpad-p14s-amd-gen5
-
-      ];
-
-    };
-  };
+  # Using import-tree to import all modules into flake-parts
+  outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
 }
