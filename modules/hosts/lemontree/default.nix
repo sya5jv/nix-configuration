@@ -37,6 +37,7 @@
       self.nixosModules.power
 
       # Services Modules
+      self.nixosModules.displayManager
       self.nixosModules.fwupd
       self.nixosModules.gnomeKeyring
       self.nixosModules.openssh
