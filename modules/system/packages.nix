@@ -21,7 +21,6 @@
           lua-language-server
           nixd
           nixfmt
-          alejandra
           eza
           zoxide
           vesktop

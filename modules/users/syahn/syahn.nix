@@ -34,6 +34,13 @@
         defaultLocale = "en_US.UTF-8";
       };
 
+      # Adding colemak keyboard layout
+      services.xserver.xkb = {
+        layout = "us,us"; # Configure keymap in X11
+        variant = ",colemak_dh"; # Configure keymap in X11
+        options = "grp:alts_toggle"; # Configure keymap in X11
+      };
+
       programs = {
         git = {
           enable = true;

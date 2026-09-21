@@ -34,6 +34,7 @@
       self.nixosModules.boot
       self.nixosModules.networking
       self.nixosModules.systemPackages
+      self.nixosModules.power
 
       # Services Modules
       self.nixosModules.fwupd

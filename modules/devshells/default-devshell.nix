@@ -55,6 +55,20 @@
             category = "[Code Quality]";
             help = "Linter: Unused bindings and arguments.";
           }
+
+          {
+            name = "test-flake";
+            command = "sudo nixos-rebuild test --flake ~/nixos-config#lemontree --show-trace";
+            help = "Test a flake rebuild for the lemontree flake with trace.";
+            category = "[Shorthands]";
+          }
+
+          {
+            name = "switch-flake";
+            command = "sudo nixos-rebuild switch --flake ~/nixos-config#lemontree --show-trace";
+            help = "Test a flake rebuild for the lemontree flake with trace.";
+            category = "[Shorthands]";
+          }
         ];
       };
     };
