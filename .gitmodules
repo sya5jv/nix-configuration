@@ -1,0 +1,3 @@
+[submodule "modules/users/syahn/dotfiles"]
+	path = modules/users/syahn/dotfiles
+	url = https://codeberg.org/syahn/dotfiles.git
